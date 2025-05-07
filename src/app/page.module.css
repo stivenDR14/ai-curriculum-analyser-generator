@@ -94,6 +94,13 @@
   background-color: #f8f8f8;
 }
 
+.disabled {
+  border-color: #ddd;
+  background-color: #f5f5f5;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
 .vacancyTextarea {
   width: 100%;
   min-height: 150px;

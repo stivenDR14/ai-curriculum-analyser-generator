@@ -10,18 +10,29 @@ import Loader from "@/components/Loader";
 import Button from "@/components/Button";
 import { Title, Subtitle } from "@/components/Typography";
 import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
+import { MAX_FILES } from "@/utils/constants";
 
 export default function Home() {
   const [isRecruiter, setIsRecruiter] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showRecruiter, setShowRecruiter] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [disableSelectFile, setDisableSelectFile] = useState(false);
 
   useEffect(() => {
     if (!isAnimating) {
       setShowRecruiter(isRecruiter);
     }
   }, [isAnimating, isRecruiter]);
+
+  useEffect(() => {
+    if (uploadedFiles.length < MAX_FILES) {
+      setDisableSelectFile(false);
+    } else {
+      setDisableSelectFile(true);
+    }
+  }, [uploadedFiles]);
 
   const toggleView = () => {
     setIsAnimating(true);
@@ -60,7 +71,10 @@ export default function Home() {
   }
 
   const handleSelectFile = () => {
-    //open file input
+    if (uploadedFiles.length >= MAX_FILES) {
+      setDisableSelectFile(true);
+      return;
+    }
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = ".pdf";
@@ -68,7 +82,7 @@ export default function Home() {
       const target = event.target as HTMLInputElement;
       const file = target.files?.[0];
       if (file) {
-        console.log(file);
+        setUploadedFiles((filesaux) => [...filesaux, file]);
       }
     };
     fileInput.click();
@@ -80,7 +94,10 @@ export default function Home() {
         <Title>{landingPageHiringLabels.title}</Title>
         <Subtitle>{landingPageHiringLabels.subtitle}</Subtitle>
 
-        <UploadArea>
+        <UploadArea
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+        >
           <textarea
             autoFocus
             className={styles.vacancyTextarea}
@@ -88,7 +105,10 @@ export default function Home() {
           ></textarea>
           <UploadInfo>
             {landingPageCurriculumLabels.dragText}
-            <SelectText onClick={handleSelectFile}>
+            <SelectText
+              onClick={handleSelectFile}
+              className={disableSelectFile ? styles.disabled : ""}
+            >
               {landingPageCurriculumLabels.selectText}
             </SelectText>
             {landingPageCurriculumLabels.selectFromText}
@@ -108,7 +128,10 @@ export default function Home() {
         <Title>{landingPageCurriculumLabels.title}</Title>
         <Subtitle>{landingPageCurriculumLabels.subtitle}</Subtitle>
 
-        <UploadArea>
+        <UploadArea
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+        >
           <textarea
             autoFocus
             className={styles.vacancyTextarea}
@@ -116,7 +139,10 @@ export default function Home() {
           ></textarea>
           <UploadInfo>
             {landingPageCurriculumLabels.dragText}
-            <SelectText onClick={handleSelectFile}>
+            <SelectText
+              onClick={handleSelectFile}
+              className={disableSelectFile ? styles.disabled : ""}
+            >
               {landingPageCurriculumLabels.selectText}
             </SelectText>
             {landingPageCurriculumLabels.selectFromText}

@@ -1,5 +1,12 @@
-import React, { useRef, useState, DragEvent } from "react";
+import React, {
+  useRef,
+  useState,
+  DragEvent,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import styles from "./UploadArea.module.css";
+import { MAX_FILES } from "@/utils/constants";
 
 interface UploadAreaProps {
   children: React.ReactNode;
@@ -7,6 +14,8 @@ interface UploadAreaProps {
   onFileSelect?: (file: File) => void;
   accept?: string;
   maxFiles?: number;
+  uploadedFiles: File[];
+  setUploadedFiles: Dispatch<SetStateAction<File[]>>;
 }
 
 export default function UploadArea({
@@ -15,9 +24,10 @@ export default function UploadArea({
   onFileSelect,
   accept = ".pdf",
   maxFiles = 2,
+  uploadedFiles,
+  setUploadedFiles,
 }: UploadAreaProps) {
   const [isDragging, setIsDragging] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -138,7 +148,10 @@ export function SelectText({
   onClick,
 }: SelectTextProps) {
   return (
-    <span className={`${styles.selectText} ${className}`} onClick={onClick}>
+    <span
+      className={`${className === "" ? styles.selectText : className}`}
+      onClick={onClick}
+    >
       {children}
     </span>
   );
