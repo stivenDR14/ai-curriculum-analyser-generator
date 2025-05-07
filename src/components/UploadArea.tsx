@@ -13,15 +13,6 @@ export default function UploadArea({
   return <div className={`${styles.uploadArea} ${className}`}>{children}</div>;
 }
 
-interface UploadTextProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export function UploadText({ children, className = "" }: UploadTextProps) {
-  return <p className={`${styles.uploadText} ${className}`}>{children}</p>;
-}
-
 interface UploadInfoProps {
   children: React.ReactNode;
   className?: string;

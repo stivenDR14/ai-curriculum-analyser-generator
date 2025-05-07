@@ -9,11 +9,7 @@ import {
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
 import { Title, Subtitle } from "@/components/Typography";
-import UploadArea, {
-  UploadText,
-  SelectText,
-  UploadInfo,
-} from "@/components/UploadArea";
+import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
 
 export default function Home() {
   const [isRecruiter, setIsRecruiter] = useState(false);
@@ -65,17 +61,21 @@ export default function Home() {
 
   return (
     <main className={styles.mainContent}>
-      {/* Vista de reclutador - siempre presente pero controlada por CSS */}
       <div className={recruiterClasses}>
         <Title>{landingPageHiringLabels.title}</Title>
         <Subtitle>{landingPageHiringLabels.subtitle}</Subtitle>
 
         <UploadArea>
           <textarea
+            autoFocus
             className={styles.vacancyTextarea}
             placeholder={landingPageHiringLabels.placeholderText}
           ></textarea>
-          <UploadInfo>{landingPageHiringLabels.uploadPdfText}</UploadInfo>
+          <UploadInfo>
+            {landingPageCurriculumLabels.dragText}
+            <SelectText>{landingPageCurriculumLabels.selectText}</SelectText>
+            {landingPageCurriculumLabels.selectFromText}
+          </UploadInfo>
         </UploadArea>
 
         <Button onClick={handleAnalyze} variant="primary">
@@ -87,18 +87,21 @@ export default function Home() {
         </Button>
       </div>
 
-      {/* Vista de candidato - siempre presente pero controlada por CSS */}
       <div className={cvClasses}>
         <Title>{landingPageCurriculumLabels.title}</Title>
         <Subtitle>{landingPageCurriculumLabels.subtitle}</Subtitle>
 
         <UploadArea>
-          <UploadText>
+          <textarea
+            autoFocus
+            className={styles.vacancyTextarea}
+            placeholder={landingPageCurriculumLabels.uploadInfo}
+          ></textarea>
+          <UploadInfo>
             {landingPageCurriculumLabels.dragText}
             <SelectText>{landingPageCurriculumLabels.selectText}</SelectText>
             {landingPageCurriculumLabels.selectFromText}
-          </UploadText>
-          <UploadInfo>{landingPageCurriculumLabels.uploadInfo}</UploadInfo>
+          </UploadInfo>
         </UploadArea>
 
         <Button onClick={handleAnalyze} variant="primary">
