@@ -6,7 +6,6 @@ import React, {
   Dispatch,
 } from "react";
 import styles from "./UploadArea.module.css";
-import { MAX_FILES } from "@/utils/constants";
 
 interface UploadAreaProps {
   children: React.ReactNode;

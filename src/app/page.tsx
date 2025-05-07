@@ -12,6 +12,8 @@ import { Title, Subtitle } from "@/components/Typography";
 import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
 import { MAX_FILES } from "@/utils/constants";
 
+const MAX_CHARACTERS = 2000;
+
 export default function Home() {
   const [isRecruiter, setIsRecruiter] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -19,6 +21,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [disableSelectFile, setDisableSelectFile] = useState(false);
+  const [recruiterText, setRecruiterText] = useState("");
+  const [cvText, setCvText] = useState("");
 
   useEffect(() => {
     if (!isAnimating) {
@@ -48,6 +52,20 @@ export default function Home() {
 
   const handleAnalyze = () => {
     setIsLoading(true);
+  };
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    isRecruiter: boolean
+  ) => {
+    const text = e.target.value;
+    if (text.length <= MAX_CHARACTERS) {
+      if (isRecruiter) {
+        setRecruiterText(text);
+      } else {
+        setCvText(text);
+      }
+    }
   };
 
   // Clases para ambas vistas
@@ -98,11 +116,19 @@ export default function Home() {
           uploadedFiles={uploadedFiles}
           setUploadedFiles={setUploadedFiles}
         >
-          <textarea
-            autoFocus
-            className={styles.vacancyTextarea}
-            placeholder={landingPageHiringLabels.placeholderText}
-          ></textarea>
+          <div className={styles.textAreaContainer}>
+            <textarea
+              autoFocus
+              className={styles.vacancyTextarea}
+              placeholder={landingPageHiringLabels.placeholderText}
+              value={recruiterText}
+              onChange={(e) => handleTextChange(e, true)}
+              maxLength={MAX_CHARACTERS}
+            ></textarea>
+            <div className={styles.characterCount}>
+              {recruiterText.length}/{MAX_CHARACTERS}
+            </div>
+          </div>
           <UploadInfo>
             {landingPageCurriculumLabels.dragText}
             <SelectText
@@ -132,11 +158,19 @@ export default function Home() {
           uploadedFiles={uploadedFiles}
           setUploadedFiles={setUploadedFiles}
         >
-          <textarea
-            autoFocus
-            className={styles.vacancyTextarea}
-            placeholder={landingPageCurriculumLabels.uploadInfo}
-          ></textarea>
+          <div className={styles.textAreaContainer}>
+            <textarea
+              autoFocus
+              className={styles.vacancyTextarea}
+              placeholder={landingPageCurriculumLabels.uploadInfo}
+              value={cvText}
+              onChange={(e) => handleTextChange(e, false)}
+              maxLength={MAX_CHARACTERS}
+            ></textarea>
+            <div className={styles.characterCount}>
+              {cvText.length}/{MAX_CHARACTERS}
+            </div>
+          </div>
           <UploadInfo>
             {landingPageCurriculumLabels.dragText}
             <SelectText
