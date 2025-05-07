@@ -6,6 +6,7 @@ import React, {
   Dispatch,
 } from "react";
 import styles from "./UploadArea.module.css";
+import { ariaLabels, frontendErrorsLabels } from "@/utils/labels";
 
 interface UploadAreaProps {
   children: React.ReactNode;
@@ -51,7 +52,7 @@ export default function UploadArea({
 
   const handleFile = (file: File) => {
     if (uploadedFiles.length >= maxFiles) {
-      alert(`Solo puedes subir un máximo de ${maxFiles} archivos`);
+      alert(frontendErrorsLabels.maximumFiles);
       return;
     }
 
@@ -114,7 +115,7 @@ export default function UploadArea({
               <button
                 className={styles.removeButton}
                 onClick={() => handleRemoveFile(index)}
-                aria-label="Eliminar archivo"
+                aria-label={ariaLabels.removeFile}
               >
                 ×
               </button>

@@ -1,3 +1,5 @@
+import { MAX_FILES, MAX_MG_ALLOWED } from "./constants";
+
 export const landingPageCurriculumLabels = {
   title:
     "Convierte tu hoja de vida en tu mejor herramienta con ayuda de la inteligencia artificial.",
@@ -20,4 +22,25 @@ export const landingPageHiringLabels = {
     "Recuerda agregar empresa, rol, descripción, rango salarial, etc",
   analyzeButtonText: "Analizar Vacante",
   switchText: "O, crea tu vacante",
+};
+
+export const ariaLabels = {
+  removeFile: "Eliminar archivo",
+};
+
+export const frontendErrorsLabels = {
+  errorProcessing:
+    "Error al procesar los datos. Por favor, intente nuevamente.",
+  maximumFiles: `Solo puedes subir un máximo de ${MAX_FILES} archivos`,
+};
+
+export const backendErrorsLabels = {
+  maximumSize: `Total files size is greater than maximum size allowed: ${MAX_MG_ALLOWED}`,
+  errorProcessingCurriculum: "Error processing curriculum data",
+  errorProcessingVacancy: "Error processing vacancy data",
+};
+
+export const backendSuccessLabels = {
+  curriculumAnalyzed: "Curriculum data received successfully",
+  vacancyAnalyzed: "Vacancy data received successfully",
 };

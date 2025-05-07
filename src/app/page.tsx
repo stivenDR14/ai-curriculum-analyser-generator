@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import {
+  frontendErrorsLabels,
   landingPageCurriculumLabels,
   landingPageHiringLabels,
 } from "@/utils/labels";
@@ -50,8 +51,41 @@ export default function Home() {
     }, 800);
   };
 
-  const handleAnalyze = () => {
-    setIsLoading(true);
+  const handleAnalyze = async (isCurriculum: boolean) => {
+    try {
+      setIsLoading(true);
+      const formData = new FormData();
+
+      // Agregar archivos al FormData
+      uploadedFiles.forEach((file) => {
+        formData.append("files", file);
+      });
+
+      // Agregar el texto correspondiente
+      formData.append("text", isCurriculum ? cvText : recruiterText);
+
+      // Enviar datos al endpoint correspondiente
+      const response = await fetch(
+        `/api/analyze/${isCurriculum ? "curriculum" : "vacancy"}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message || frontendErrorsLabels.errorProcessing);
+      }
+
+      // Si todo sale bien, continuamos con la navegación
+      // La navegación se maneja en el componente Loader
+    } catch (error) {
+      console.error("Error:", error);
+      setIsLoading(false);
+      alert(frontendErrorsLabels.errorProcessing);
+    }
   };
 
   const handleTextChange = (
@@ -141,7 +175,7 @@ export default function Home() {
           </UploadInfo>
         </UploadArea>
 
-        <Button onClick={handleAnalyze} variant="primary">
+        <Button onClick={() => handleAnalyze(false)} variant="primary">
           {landingPageHiringLabels.analyzeButtonText}
         </Button>
 
@@ -183,7 +217,7 @@ export default function Home() {
           </UploadInfo>
         </UploadArea>
 
-        <Button onClick={handleAnalyze} variant="primary">
+        <Button onClick={() => handleAnalyze(true)} variant="primary">
           {landingPageCurriculumLabels.analyzeButtonText}
         </Button>
 
