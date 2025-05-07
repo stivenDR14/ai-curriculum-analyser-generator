@@ -12,6 +12,7 @@ import Button from "@/components/Button";
 import { Title, Subtitle } from "@/components/Typography";
 import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
 import { MAX_FILES } from "@/utils/constants";
+import { showToast } from "@/components/Toast";
 
 const MAX_CHARACTERS = 2000;
 
@@ -51,40 +52,40 @@ export default function Home() {
     }, 800);
   };
 
-  const handleAnalyze = async (isCurriculum: boolean) => {
-    try {
-      setIsLoading(true);
-      const formData = new FormData();
+  const handleAnalyze = async (type: "curriculum" | "vacancy") => {
+    if (
+      !uploadedFiles.length &&
+      (type === "curriculum" ? cvText === "" : recruiterText === "")
+    ) {
+      showToast.error(frontendErrorsLabels.noFilesSelected);
+      return;
+    }
 
-      // Agregar archivos al FormData
-      uploadedFiles.forEach((file) => {
-        formData.append("files", file);
+    setIsLoading(true);
+    const formData = new FormData();
+    uploadedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
+    formData.append("text", type === "curriculum" ? cvText : recruiterText);
+
+    try {
+      const response = await fetch(`/api/analyze/${type}`, {
+        method: "POST",
+        body: formData,
       });
 
-      // Agregar el texto correspondiente
-      formData.append("text", isCurriculum ? cvText : recruiterText);
-
-      // Enviar datos al endpoint correspondiente
-      const response = await fetch(
-        `/api/analyze/${isCurriculum ? "curriculum" : "vacancy"}`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.message || frontendErrorsLabels.errorProcessing);
+      if (!response.ok) {
+        throw new Error(frontendErrorsLabels.uploadError);
       }
 
-      // Si todo sale bien, continuamos con la navegación
-      // La navegación se maneja en el componente Loader
-    } catch (error) {
+      const data = await response.json();
+      showToast.success(data.message);
+      // Aquí puedes manejar la respuesta exitosa
+    } catch (error: unknown) {
       console.error("Error:", error);
+      showToast.error(frontendErrorsLabels.uploadError);
+    } finally {
       setIsLoading(false);
-      alert(frontendErrorsLabels.errorProcessing);
     }
   };
 
@@ -175,7 +176,7 @@ export default function Home() {
           </UploadInfo>
         </UploadArea>
 
-        <Button onClick={() => handleAnalyze(false)} variant="primary">
+        <Button onClick={() => handleAnalyze("vacancy")} variant="primary">
           {landingPageHiringLabels.analyzeButtonText}
         </Button>
 
@@ -217,7 +218,7 @@ export default function Home() {
           </UploadInfo>
         </UploadArea>
 
-        <Button onClick={() => handleAnalyze(true)} variant="primary">
+        <Button onClick={() => handleAnalyze("curriculum")} variant="primary">
           {landingPageCurriculumLabels.analyzeButtonText}
         </Button>
 

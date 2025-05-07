@@ -29,9 +29,11 @@ export const ariaLabels = {
 };
 
 export const frontendErrorsLabels = {
-  errorProcessing:
-    "Error al procesar los datos. Por favor, intente nuevamente.",
-  maximumFiles: `Solo puedes subir un máximo de ${MAX_FILES} archivos`,
+  errorProcessing: "Error al procesar la solicitud",
+  maximumFiles: `Solo puedes subir hasta ${MAX_FILES} archivos`,
+  noFilesSelected:
+    "Por favor, selecciona al menos un archivo o ingresa el texto del recurso",
+  uploadError: "Error al subir los archivos",
 };
 
 export const backendErrorsLabels = {

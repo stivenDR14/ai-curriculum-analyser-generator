@@ -1,0 +1,67 @@
+.toastContainer {
+  font-family: var(--font-geist-sans);
+}
+
+.toastBody {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  color: #333;
+}
+
+.toastProgress {
+  background: rgba(103, 85, 208, 0.2) !important;
+}
+
+.successToast {
+  background: #fff !important;
+  border-left: 4px solid #6755d0 !important;
+  color: #555 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.errorToast {
+  background: #fff !important;
+  border-left: 4px solid #aaa !important;
+  color: #555 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.warningToast {
+  background: #fff !important;
+  border-left: 4px solid #ff9800 !important;
+  color: #555 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.infoToast {
+  background: #fff !important;
+  border-left: 4px solid #6855d070 !important;
+  color: #555 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Estilos para los iconos */
+.successToast svg {
+  color: #6755d0 !important;
+}
+
+.errorToast svg {
+  color: #aaa !important;
+}
+
+.warningToast svg {
+  color: #ff9800 !important;
+}
+
+.infoToast svg {
+  color: #6755d0 !important;
+}
+
+/* Estilos responsivos */
+@media (max-width: 480px) {
+  .toastBody {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}

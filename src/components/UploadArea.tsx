@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import styles from "./UploadArea.module.css";
 import { ariaLabels, frontendErrorsLabels } from "@/utils/labels";
-
+import { showToast } from "@/components/Toast";
 interface UploadAreaProps {
   children: React.ReactNode;
   className?: string;
@@ -52,7 +52,7 @@ export default function UploadArea({
 
   const handleFile = (file: File) => {
     if (uploadedFiles.length >= maxFiles) {
-      alert(frontendErrorsLabels.maximumFiles);
+      showToast.error(frontendErrorsLabels.maximumFiles);
       return;
     }
 
