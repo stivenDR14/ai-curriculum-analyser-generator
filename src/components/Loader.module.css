@@ -1,0 +1,36 @@
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  padding: 2rem;
+}
+
+.loaderTitle {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.progressBar {
+  width: 80%;
+  max-width: 500px;
+  height: 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #6755d0;
+  transition: width 0.1s ease;
+}
+
+.progressText {
+  font-size: 1rem;
+  color: #555;
+}

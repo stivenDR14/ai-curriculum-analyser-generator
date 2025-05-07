@@ -6,11 +6,13 @@ import {
   landingPageCurriculumLabels,
   landingPageHiringLabels,
 } from "@/utils/labels";
+import Loader from "@/components/Loader";
 
 export default function Home() {
   const [isRecruiter, setIsRecruiter] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showRecruiter, setShowRecruiter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!isAnimating) {
@@ -30,6 +32,10 @@ export default function Home() {
     }, 800);
   };
 
+  const handleAnalyze = () => {
+    setIsLoading(true);
+  };
+
   // Clases para ambas vistas
   const recruiterClasses = `${styles.landingPage} ${
     !isAnimating && showRecruiter
@@ -41,6 +47,14 @@ export default function Home() {
       ? styles.landingPageEnter
       : styles.landingPageExit
   }`;
+
+  if (isLoading) {
+    return (
+      <Loader
+        destination={isRecruiter ? "/resources" : "/curriculum-analisys"}
+      />
+    );
+  }
 
   return (
     <main className={styles.mainContent}>
@@ -59,7 +73,7 @@ export default function Home() {
           </p>
         </div>
 
-        <button className={styles.analyzeButton}>
+        <button onClick={handleAnalyze} className={styles.analyzeButton}>
           {landingPageHiringLabels.analyzeButtonText}
         </button>
 
@@ -88,7 +102,7 @@ export default function Home() {
           </p>
         </div>
 
-        <button className={styles.analyzeButton}>
+        <button onClick={handleAnalyze} className={styles.analyzeButton}>
           {landingPageCurriculumLabels.analyzeButtonText}
         </button>
 
