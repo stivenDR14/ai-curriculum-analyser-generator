@@ -7,6 +7,13 @@ import {
   landingPageHiringLabels,
 } from "@/utils/labels";
 import Loader from "@/components/Loader";
+import Button from "@/components/Button";
+import { Title, Subtitle } from "@/components/Typography";
+import UploadArea, {
+  UploadText,
+  SelectText,
+  UploadInfo,
+} from "@/components/UploadArea";
 
 export default function Home() {
   const [isRecruiter, setIsRecruiter] = useState(false);
@@ -60,55 +67,47 @@ export default function Home() {
     <main className={styles.mainContent}>
       {/* Vista de reclutador - siempre presente pero controlada por CSS */}
       <div className={recruiterClasses}>
-        <h1 className={styles.title}>{landingPageHiringLabels.title}</h1>
-        <p className={styles.subtitle}>{landingPageHiringLabels.subtitle}</p>
+        <Title>{landingPageHiringLabels.title}</Title>
+        <Subtitle>{landingPageHiringLabels.subtitle}</Subtitle>
 
-        <div className={styles.uploadArea}>
+        <UploadArea>
           <textarea
             className={styles.vacancyTextarea}
             placeholder={landingPageHiringLabels.placeholderText}
           ></textarea>
-          <p className={styles.uploadOption}>
-            {landingPageHiringLabels.uploadPdfText}
-          </p>
-        </div>
+          <UploadInfo>{landingPageHiringLabels.uploadPdfText}</UploadInfo>
+        </UploadArea>
 
-        <button onClick={handleAnalyze} className={styles.analyzeButton}>
+        <Button onClick={handleAnalyze} variant="primary">
           {landingPageHiringLabels.analyzeButtonText}
-        </button>
+        </Button>
 
-        <button onClick={toggleView} className={styles.switchButton}>
+        <Button onClick={toggleView} variant="switch">
           {landingPageHiringLabels.switchText}
-        </button>
+        </Button>
       </div>
 
       {/* Vista de candidato - siempre presente pero controlada por CSS */}
       <div className={cvClasses}>
-        <h1 className={styles.title}>{landingPageCurriculumLabels.title}</h1>
-        <p className={styles.subtitle}>
-          {landingPageCurriculumLabels.subtitle}
-        </p>
+        <Title>{landingPageCurriculumLabels.title}</Title>
+        <Subtitle>{landingPageCurriculumLabels.subtitle}</Subtitle>
 
-        <div className={styles.uploadArea}>
-          <p className={styles.dragText}>
+        <UploadArea>
+          <UploadText>
             {landingPageCurriculumLabels.dragText}
-            <span className={styles.selectText}>
-              {landingPageCurriculumLabels.selectText}
-            </span>
+            <SelectText>{landingPageCurriculumLabels.selectText}</SelectText>
             {landingPageCurriculumLabels.selectFromText}
-          </p>
-          <p className={styles.uploadInfo}>
-            {landingPageCurriculumLabels.uploadInfo}
-          </p>
-        </div>
+          </UploadText>
+          <UploadInfo>{landingPageCurriculumLabels.uploadInfo}</UploadInfo>
+        </UploadArea>
 
-        <button onClick={handleAnalyze} className={styles.analyzeButton}>
+        <Button onClick={handleAnalyze} variant="primary">
           {landingPageCurriculumLabels.analyzeButtonText}
-        </button>
+        </Button>
 
-        <button onClick={toggleView} className={styles.switchButton}>
+        <Button onClick={toggleView} variant="switch">
           {landingPageCurriculumLabels.switchText}
-        </button>
+        </Button>
       </div>
     </main>
   );

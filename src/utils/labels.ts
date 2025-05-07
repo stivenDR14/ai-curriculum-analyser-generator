@@ -4,7 +4,7 @@ export const landingPageCurriculumLabels = {
   subtitle:
     "Ahorra tiempo personalizando tu CV, tu carta de presentación y prepárate para cada oferta laboral.",
   dragText: "Arrastra el archivo o",
-  selectText: "selecciona",
+  selectText: " selecciona ",
   selectFromText: "desde tus archivos",
   uploadInfo:
     "Sube tu hoja de vida en formato PDF o Word. Asegúrate de que esté actualizada.",

@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
+import Button from "@/components/Button";
+import { Title, Description } from "@/components/Typography";
 
 export default function Resources() {
   const [jobDescription, setJobDescription] = useState("");
@@ -20,12 +22,12 @@ export default function Resources() {
 
   return (
     <main className={styles.container}>
-      <h1 className={styles.mainTitle}>¿A qué te quieres postular?</h1>
+      <Title centered>{`¿A qué te quieres postular?`}</Title>
 
-      <p className={styles.description}>
+      <Description centered>
         En el campo a continuación agrega la URL donde está el vacante, o pega
         el texto de la página que la contiene.
-      </p>
+      </Description>
 
       <div className={styles.inputContainer}>
         <textarea
@@ -42,9 +44,9 @@ export default function Resources() {
         </div>
 
         <div className={styles.actionContainer}>
-          <button onClick={handleAnalyzeJob} className={styles.analyzeButton}>
+          <Button onClick={handleAnalyzeJob} variant="primary">
             Analizar Vacante
-          </button>
+          </Button>
         </div>
       </div>
 

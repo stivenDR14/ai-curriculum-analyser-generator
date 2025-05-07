@@ -3,6 +3,8 @@
 import { useState } from "react";
 import styles from "./page.module.css";
 import Loader from "@/components/Loader";
+import Button from "@/components/Button";
+import { Title, Description, SectionTitle } from "@/components/Typography";
 
 export default function CurriculumAnalisys() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,20 +19,17 @@ export default function CurriculumAnalisys() {
 
   return (
     <main className={styles.container}>
-      <h1 className={styles.mainTitle}>
+      <Title centered>
         ¡Bien!, hemos terminado de analizar y extraer tu información
-      </h1>
+      </Title>
 
-      <p className={styles.description}>
+      <Description centered>
         Hemos logrado un 90% de precisión en la extracción. Hemos generado las
         siguientes secciones
-      </p>
+      </Description>
 
       <div className={styles.resultSection}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.icon}>📝</span>
-          <h2>Título profesional sugerido</h2>
-        </div>
+        <SectionTitle icon="📝">Título profesional sugerido</SectionTitle>
         <div className={styles.sectionContent}>
           <p>
             Senior UX Designer | Consultor en Innovación Digital | Emprendedor
@@ -44,10 +43,7 @@ export default function CurriculumAnalisys() {
       </div>
 
       <div className={styles.resultSection}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.icon}>📄</span>
-          <h2>Extracto o resumen profesional</h2>
-        </div>
+        <SectionTitle icon="📄">Extracto o resumen profesional</SectionTitle>
         <div className={styles.sectionContent}>
           <p>
             Diseñador de experiencias con más de 15 años de trayectoria creando
@@ -62,10 +58,7 @@ export default function CurriculumAnalisys() {
       </div>
 
       <div className={styles.resultSection}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.icon}>💼</span>
-          <h2>Experiencia laboral</h2>
-        </div>
+        <SectionTitle icon="💼">Experiencia laboral</SectionTitle>
         <div className={styles.sectionContent}>
           <div className={styles.experienceItem}>
             <h3>Fundador & UX Strategist</h3>
@@ -75,9 +68,9 @@ export default function CurriculumAnalisys() {
       </div>
 
       <div className={styles.actionContainer}>
-        <button onClick={handleContinue} className={styles.continueButton}>
+        <Button onClick={handleContinue} variant="primary">
           Guardar y Continuar
-        </button>
+        </Button>
       </div>
     </main>
   );
