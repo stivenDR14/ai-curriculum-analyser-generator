@@ -59,6 +59,21 @@ export default function Home() {
     );
   }
 
+  const handleSelectFile = () => {
+    //open file input
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".pdf";
+    fileInput.onchange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (file) {
+        console.log(file);
+      }
+    };
+    fileInput.click();
+  };
+
   return (
     <main className={styles.mainContent}>
       <div className={recruiterClasses}>
@@ -73,7 +88,9 @@ export default function Home() {
           ></textarea>
           <UploadInfo>
             {landingPageCurriculumLabels.dragText}
-            <SelectText>{landingPageCurriculumLabels.selectText}</SelectText>
+            <SelectText onClick={handleSelectFile}>
+              {landingPageCurriculumLabels.selectText}
+            </SelectText>
             {landingPageCurriculumLabels.selectFromText}
           </UploadInfo>
         </UploadArea>
@@ -99,7 +116,9 @@ export default function Home() {
           ></textarea>
           <UploadInfo>
             {landingPageCurriculumLabels.dragText}
-            <SelectText>{landingPageCurriculumLabels.selectText}</SelectText>
+            <SelectText onClick={handleSelectFile}>
+              {landingPageCurriculumLabels.selectText}
+            </SelectText>
             {landingPageCurriculumLabels.selectFromText}
           </UploadInfo>
         </UploadArea>

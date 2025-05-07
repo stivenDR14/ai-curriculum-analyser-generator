@@ -1,16 +1,120 @@
-import React from "react";
+import React, { useRef, useState, DragEvent } from "react";
 import styles from "./UploadArea.module.css";
 
 interface UploadAreaProps {
   children: React.ReactNode;
   className?: string;
+  onFileSelect?: (file: File) => void;
+  accept?: string;
+  maxFiles?: number;
 }
 
 export default function UploadArea({
   children,
   className = "",
+  onFileSelect,
+  accept = ".pdf",
+  maxFiles = 2,
 }: UploadAreaProps) {
-  return <div className={`${styles.uploadArea} ${className}`}>{children}</div>;
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFile(files[0]);
+    }
+  };
+
+  const handleFile = (file: File) => {
+    if (uploadedFiles.length >= maxFiles) {
+      alert(`Solo puedes subir un máximo de ${maxFiles} archivos`);
+      return;
+    }
+
+    if (onFileSelect) {
+      onFileSelect(file);
+    }
+    setUploadedFiles((prev) => [...prev, file]);
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleFile(files[0]);
+    }
+  };
+
+  const handleSelectTextClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className={styles.uploadAreaContainer}>
+      <div
+        className={`${styles.uploadArea} ${className} ${
+          isDragging ? styles.dragging : ""
+        }`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileInput}
+          accept={accept}
+          style={{ display: "none" }}
+        />
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child) && child.type === SelectText) {
+            return React.cloneElement(
+              child as React.ReactElement<SelectTextProps>,
+              {
+                onClick: handleSelectTextClick,
+              }
+            );
+          }
+          return child;
+        })}
+      </div>
+
+      {uploadedFiles.length > 0 && (
+        <div className={styles.uploadedFilesContainer}>
+          {uploadedFiles.map((file, index) => (
+            <div key={index} className={styles.fileItem}>
+              <span className={styles.fileName}>{file.name}</span>
+              <button
+                className={styles.removeButton}
+                onClick={() => handleRemoveFile(index)}
+                aria-label="Eliminar archivo"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 interface UploadInfoProps {

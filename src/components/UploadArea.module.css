@@ -10,11 +10,18 @@
   min-height: 200px;
   border: 2px dashed #ddd;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .uploadArea:hover {
   border-color: #aaa;
   background-color: #f8f8f8;
+}
+
+.uploadArea.dragging {
+  border-color: #6755d0;
+  background-color: rgba(103, 85, 208, 0.05);
+  transform: scale(1.02);
 }
 
 .uploadText {
@@ -27,6 +34,7 @@
   color: #6755d0;
   font-weight: 600;
   cursor: pointer;
+  user-select: none;
 }
 
 .selectText:hover {
