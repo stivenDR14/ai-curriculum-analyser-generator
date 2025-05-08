@@ -20,7 +20,7 @@ example:
 ---
 
 ## 1. Contact Information
-
+Inlclude a bulleted list of the following information:
 Full Name  
 Phone Number  
 Professional Email  

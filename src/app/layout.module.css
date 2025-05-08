@@ -1,6 +1,6 @@
 .layoutContainer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 640px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 860px) minmax(0, 1fr);
   min-height: 100vh;
   width: 100vw;
   box-sizing: border-box;
@@ -24,7 +24,7 @@
 
 .mainContentWrapper {
   width: 100%;
-  max-width: 640px;
+  max-width: 820px;
   margin: 0 auto;
   box-sizing: border-box;
 }

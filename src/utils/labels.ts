@@ -57,7 +57,7 @@ export const backendSuccessLabels = {
 };
 
 export const curriculumAnalisysLabels = {
-  continueButtonText: "Guardar y Continuar",
+  continueButtonText: "Continuar",
   rejectAndUploadOther: "Rechazar y subir otro CV",
   professionalTitle: "Título profesional sugerido",
   contactInformation: "Información de contacto",

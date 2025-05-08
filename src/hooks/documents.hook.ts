@@ -7,6 +7,7 @@ import {
 } from "@/utils/constants-all";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { IResume, IVacancy } from "@/models/resume";
+import { useResumeStore } from "./useResumeStore";
 
 interface IResponse {
   success: boolean;
@@ -40,12 +41,11 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
     return false;
   });
 
+  const setResumeData = useResumeStore((state) => state.setResumeData);
+
   useEffect(() => {
     localStorage.setItem(RECRUITER_MODE_KEY, JSON.stringify(isRecruiter));
   }, [isRecruiter]);
-
-  //if there is information on the local storage about the resume data, and the local storage is not recruiter mode, route to the currirculum-analysis page
-  // if there is information on the local storage about the vacancy data, and the local storage is recruiter mode, route to the resources page
 
   useEffect(() => {
     if (getResumeData() && !isRecruiter) {
@@ -69,6 +69,7 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
       );
     } else {
       showToast.success(data.message);
+      setResumeData((data.data as ResumeData).resume);
       localStorage.setItem(
         isRecruiter ? RESUME_DATA_KEY_RECRUITER : RESUME_DATA_KEY,
         JSON.stringify((data.data as ResumeData).resume)
