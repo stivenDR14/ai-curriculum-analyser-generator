@@ -6,6 +6,7 @@ import {
   RESUME_DATA_KEY_RECRUITER,
 } from "@/utils/constants-all";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { IResume, IVacancy } from "@/models/resume";
 
 interface IResponse {
   success: boolean;
@@ -14,29 +15,12 @@ interface IResponse {
 }
 
 interface ResumeData {
-  resume: {
-    title: string;
-    contactInformation: string;
-    professionalSummary: string;
-    skills: string;
-    workExperience: string;
-    education: string;
-    certifications: string;
-  };
+  resume: IResume;
   error?: string;
 }
 
 interface VacancyData {
-  vacancy: {
-    title: string;
-    industry: string;
-    description: string;
-    requirements: string;
-    benefits: string;
-    salary: string;
-    location: string;
-    company: string;
-  };
+  vacancy: IVacancy;
   error?: string;
 }
 

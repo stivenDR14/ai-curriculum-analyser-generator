@@ -1,8 +1,10 @@
 .layoutContainer {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 640px) minmax(0, 1fr);
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .advertisementColumn {
@@ -22,12 +24,18 @@
 
 .mainContentWrapper {
   width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Responsive styles */
 @media (max-width: 1024px) {
   .layoutContainer {
-    grid-template-columns: 0.5fr 3fr 0.5fr;
+    grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr) minmax(0, 0.5fr);
+  }
+  .mainContentWrapper {
+    max-width: 100vw;
   }
 }
 
@@ -35,14 +43,19 @@
   .layoutContainer {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
+    width: 100vw;
+    min-width: 0;
   }
-
   .advertisementColumn {
-    height: 60px;
+    height: 40px;
     width: 100%;
+    min-width: 0;
   }
-
   .advertisementSpace {
     transform: none;
+  }
+  .mainContentWrapper {
+    max-width: 100vw;
+    padding: 0 0.5rem;
   }
 }

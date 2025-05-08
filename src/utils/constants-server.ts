@@ -61,7 +61,21 @@ It is mandatory to write it in ${language}.
 
 ---
 
-## 5. Education
+## 5. Projects and Achievements
+
+Include any standout projects, freelance work, personal initiatives, or major accomplishments.  
+This is especially useful for candidates in tech, design, entrepreneurship, or those making career changes.
+
+**Project Title or Achievement** — *Optional Date*  
+- Describe the project, your role, technologies or methods used, and the measurable outcome or impact.
+
+Example:  
+**Inventory Automation System**  
+- Developed a Python-based automation tool that reduced inventory reconciliation time by 75%.
+
+---
+
+## 6. Education
 
 Include each degree or certification with the following format:
 
@@ -70,13 +84,13 @@ Include each degree or certification with the following format:
 It is mandatory to write it in ${language}.
 ---
 
-## 6. Certifications / Training
+## 7. Certifications / Training
 
 (Only if applicable)
 It is mandatory to write it in ${language}.
 ---
 
-## 7. Additional Tips for the Rewrite
+## 8. Additional Tips for the Rewrite
 
 - Avoid using tables, images, or any complex formatting.
 - Use standard fonts such as Arial, Calibri, or Times New Roman.
@@ -109,6 +123,7 @@ Requirements for resume:
     "professionalSummary": "string",
     "skills": "string",
     "workExperience": "string",
+    "projects": "string",
     "education": "string",
     "certifications": "string"
   },
@@ -120,7 +135,8 @@ Requirements for resume:
    * contactInformation: the contact information of the person in the resume, write it in ${language}
    * professionalSummary: the professional summary of the person in the resume, write it in ${language}
    * skills: All the skills available in the resume, write it in ${language}
-   * workExperience: All the work experience available in the resume with the details of the job, company, location, start date, end date, and the description of the job, write in 
+   * workExperience: All the work experience available in the resume with the details of the job, company, location, start date, end date, and the description of the job, write it in ${language}
+   * projects: All the projects available in the resume with the details of the project, title, description, technologies or methods used, and the measurable outcome or impact, write it in ${language}
    * education: All the education available in the resume with the details of the degree, major, university, city, state, and the graduation year, write it in ${language}
    * certifications: All the certifications or extra courses taken by the person in the resume if there are any, write it in ${language}
    * error: the error message if there is information missing for create a proper resume, write it in ${language}

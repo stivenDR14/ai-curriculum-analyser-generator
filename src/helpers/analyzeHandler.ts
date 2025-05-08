@@ -117,6 +117,7 @@ export async function handleAnalysis(
                     "professionalSummary": "string",
                     "skills": "string",
                     "workExperience": "string",
+                    "projects": "string",
                     "education": "string",
                     "certifications": "string"
                   },

@@ -59,4 +59,12 @@ export const backendSuccessLabels = {
 export const curriculumAnalisysLabels = {
   continueButtonText: "Guardar y Continuar",
   rejectAndUploadOther: "Rechazar y subir otro CV",
+  professionalTitle: "Título profesional sugerido",
+  contactInformation: "Información de contacto",
+  professionalSummary: "Extracto o resumen profesional",
+  professionalExperience: "Experiencia profesional",
+  professionalProjects: "Proyectos y logros",
+  professionalEducation: "Educación",
+  professionalSkills: "Habilidades",
+  professionalCertifications: "Certificaciones",
 };

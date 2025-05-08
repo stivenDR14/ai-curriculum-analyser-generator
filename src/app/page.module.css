@@ -46,7 +46,6 @@
   opacity: 1;
   transform: scale(1);
   height: 100%;
-  overflow: auto;
   padding: 1rem 1rem;
 }
 
