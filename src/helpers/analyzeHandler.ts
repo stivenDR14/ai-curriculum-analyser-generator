@@ -9,6 +9,7 @@ import {
   Message,
   ConverseCommandInput,
 } from "@aws-sdk/client-bedrock-runtime";
+import { PROMPT_RESUME_REWRITE } from "@/utils/constants";
 
 type AnalysisType = "vacancy" | "curriculum";
 
@@ -73,7 +74,54 @@ export async function handleAnalysis(
         {
           role: ConversationRole.USER,
           content: [
-            { text },
+            {
+              text: `
+                       
+                Now, take the resume, descriptions, resources and all the information that you have below and rewrite it using the structure and best practices above:
+
+                ${
+                  text
+                    ? `
+                There are the resources that you have to take into account:
+                
+                ${
+                  text !== ""
+                    ? `*Text resources*
+                ${text} 
+                -----
+                `
+                    : ""
+                }
+              
+                `
+                    : ""
+                }
+
+                ${
+                  files.length > 0
+                    ? `
+                *Files resources*
+                **Take the added Files into account and use them to improve the resume, extracting all the information you can and reordering the sections to make it more readable and ATS friendly.**
+                -----
+                      `
+                    : ""
+                }
+
+                Please provide the response in the following JSON format:
+                {
+                  "resume": {
+                    "title": "string",
+                    "contactInformation": "string",
+                    "professionalSummary": "string",
+                    "skills": "string",
+                    "workExperience": "string",
+                    "education": "string",
+                    "certifications": "string"
+                  },
+                  "error": "string"
+                }
+              `,
+            },
             ...(await Promise.all(
               files.map(async (file) => ({
                 document: {
@@ -90,9 +138,14 @@ export async function handleAnalysis(
       ] as Message[],
       system: [
         {
-          text: "Based on the resources provided by the user, extract all the information about each file and page, reorder the information and return it in a structured way.",
+          text: PROMPT_RESUME_REWRITE,
         },
       ],
+      inferenceConfig: {
+        temperature: 0.4,
+        topP: 0.9,
+        maxTokens: 3000,
+      },
     };
 
     const command = new ConverseCommand(input);
@@ -104,20 +157,42 @@ export async function handleAnalysis(
       response.output?.message?.content?.map((block) => block.text)
     );
 
+    // Extraer el texto de la respuesta
+    const responseText = response.output?.message?.content?.[0]?.text || "";
+
+    // Intentar extraer el JSON de la respuesta
+    let jsonResponse;
+    try {
+      // Buscar el contenido JSON entre los marcadores de código
+      const jsonMatch =
+        responseText.match(/```json\n([\s\S]*?)\n```/) ||
+        responseText.match(/```\n([\s\S]*?)\n```/) ||
+        responseText.match(/{[\s\S]*?}/);
+
+      if (jsonMatch) {
+        jsonResponse = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+      } else {
+        throw new Error("No JSON found in response");
+      }
+    } catch (error) {
+      console.error("Error parsing JSON response:", error);
+      return NextResponse.json(
+        {
+          success: false,
+          message: backendErrorsLabels.errorProcessingCurriculum,
+          error: "Invalid JSON response from model",
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
       message:
         type === "vacancy"
           ? backendSuccessLabels.vacancyAnalyzed
           : backendSuccessLabels.curriculumAnalyzed,
-      data: {
-        files: files.map((file) => ({
-          name: file.name,
-          type: file.type,
-          size: file.size,
-        })),
-        text,
-      },
+      data: jsonResponse,
     });
   } catch (error) {
     console.error(`Error processing ${type}:`, error);
