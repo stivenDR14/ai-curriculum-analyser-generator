@@ -1,0 +1,94 @@
+import { useState, useEffect } from "react";
+import { showToast } from "@/components/Toast";
+import {
+  RECRUITER_MODE_KEY,
+  RESUME_DATA_KEY,
+  RESUME_DATA_KEY_RECRUITER,
+} from "@/utils/constants-all";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { IResume, IVacancy } from "@/models/resume";
+import { useResumeStore } from "./useResumeStore";
+
+interface IResponse {
+  success: boolean;
+  message: string;
+  data: ResumeData | VacancyData;
+}
+
+interface ResumeData {
+  resume: IResume;
+  error?: string;
+}
+
+interface VacancyData {
+  vacancy: IVacancy;
+  error?: string;
+}
+
+interface UseDocumentsReturn {
+  isRecruiter: boolean;
+  setIsRecruiter: (value: boolean) => void;
+  saveResumeData: (data: IResponse, isRecruiter: boolean) => void;
+  getResumeData: () => ResumeData | null;
+}
+
+export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
+  const [isRecruiter, setIsRecruiter] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const savedMode = localStorage.getItem(RECRUITER_MODE_KEY);
+      return savedMode ? JSON.parse(savedMode) : false;
+    }
+    return false;
+  });
+
+  const setResumeData = useResumeStore((state) => state.setResumeData);
+
+  useEffect(() => {
+    localStorage.setItem(RECRUITER_MODE_KEY, JSON.stringify(isRecruiter));
+  }, [isRecruiter]);
+
+  useEffect(() => {
+    if (getResumeData() && !isRecruiter) {
+      router.push("/curriculum-analisys");
+    }
+    if (getResumeData() && isRecruiter) {
+      router.push("/resources");
+    }
+  }, [isRecruiter]);
+
+  const saveResumeData = (data: IResponse, isRecruiter: boolean) => {
+    if (data.data.error) {
+      showToast.info(data.data.error);
+    }
+
+    if (isRecruiter) {
+      showToast.success(data.message);
+      localStorage.setItem(
+        isRecruiter ? RESUME_DATA_KEY_RECRUITER : RESUME_DATA_KEY,
+        JSON.stringify((data.data as VacancyData).vacancy)
+      );
+    } else {
+      showToast.success(data.message);
+      setResumeData((data.data as ResumeData).resume);
+      localStorage.setItem(
+        isRecruiter ? RESUME_DATA_KEY_RECRUITER : RESUME_DATA_KEY,
+        JSON.stringify((data.data as ResumeData).resume)
+      );
+    }
+  };
+
+  const getResumeData = (): ResumeData | null => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem(RESUME_DATA_KEY);
+      return savedData ? JSON.parse(savedData) : null;
+    }
+    return null;
+  };
+
+  return {
+    isRecruiter,
+    setIsRecruiter,
+    saveResumeData,
+    getResumeData,
+  };
+};
