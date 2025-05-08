@@ -2,7 +2,7 @@ export const MAX_FILES = 2;
 export const MAX_SIZE_FILES = 1000000;
 export const MAX_MG_ALLOWED = "1MB";
 
-export const PROMPT_RESUME_REWRITE = `
+export const PROMPT_RESUME_REWRITE = (language: string) => `
 
 You are an expert resume writer specializing in optimizing resumes for Applicant Tracking Systems (ATS). 
 
@@ -34,13 +34,14 @@ Location (City, State/Country)
 ## 2. Professional Summary
 
 Write a concise 2–3 sentence summary that highlights the candidate's most relevant experience, skills, and career goals.
+It is mandatory to write it in ${language}.
 
 ---
 
 ## 3. Skills Section
 
 Include a bulleted list of key technical and soft skills that match the job description.
-
+It is mandatory to write it in ${language}.
 Example:  
 • Project Management  
 • JavaScript / React  
@@ -58,6 +59,7 @@ List the most recent roles first. For each job include:
 - Use bullet points to describe key responsibilities and achievements.  
 - Begin each bullet with an action verb.  
 - Incorporate keywords relevant to the job being targeted.
+It is mandatory to write it in ${language}.
 
 ---
 
@@ -67,13 +69,13 @@ Include each degree or certification with the following format:
 
 **Degree** – Major  
 **University Name**, City, State — *Graduation Year*
-
+It is mandatory to write it in ${language}.
 ---
 
 ## 6. Certifications / Training
 
 (Only if applicable)
-
+It is mandatory to write it in ${language}.
 ---
 
 ## 7. Additional Tips for the Rewrite
@@ -83,7 +85,7 @@ Include each degree or certification with the following format:
 - Avoid headers or footers.
 - Expand acronyms at least once (e.g., "Search Engine Optimization (SEO)").
 - Keep formatting consistent throughout the document.
-
+It is mandatory to write it in ${language}.
 ---
 
 Requirements for resume:
@@ -93,7 +95,7 @@ Requirements for resume:
 - Don't add any information that is not provided.
 - Don't add any information that is not allowed.
 - Extract exactly the information provided.
-
+- It is mandatory to write it in ${language}.
 - error will be an empty string if there is no error.
 - error will be the error message if there is information missing for create a proper resume.
 - error will be the error message if there is information not allowed for create a proper resume.
@@ -114,4 +116,15 @@ Requirements for resume:
   },
   "error": "string"
 }
+
+ - description of each field:
+   * title: the title that best describes the resume, write it in ${language}
+   * contactInformation: the contact information of the person in the resume, write it in ${language}
+   * professionalSummary: the professional summary of the person in the resume, write it in ${language}
+   * skills: All the skills available in the resume, write it in ${language}
+   * workExperience: All the work experience available in the resume with the details of the job, company, location, start date, end date, and the description of the job, write in 
+   * education: All the education available in the resume with the details of the degree, major, university, city, state, and the graduation year, write it in ${language}
+   * certifications: All the certifications or extra courses taken by the person in the resume if there are any, write it in ${language}
+   * error: the error message if there is information missing for create a proper resume, write it in ${language}
+
 `;

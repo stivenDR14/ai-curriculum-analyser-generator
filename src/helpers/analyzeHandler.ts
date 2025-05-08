@@ -68,6 +68,8 @@ export async function handleAnalysis(
       region: process.env.AWS_REGION,
     });
 
+    const language = "spanish";
+
     const input: ConverseCommandInput = {
       modelId: "amazon.nova-pro-v1:0",
       messages: [
@@ -120,6 +122,8 @@ export async function handleAnalysis(
                   },
                   "error": "string"
                 }
+
+                and each field must be written in ${language}.
               `,
             },
             ...(await Promise.all(
@@ -138,7 +142,7 @@ export async function handleAnalysis(
       ] as Message[],
       system: [
         {
-          text: PROMPT_RESUME_REWRITE,
+          text: PROMPT_RESUME_REWRITE(language),
         },
       ],
       inferenceConfig: {

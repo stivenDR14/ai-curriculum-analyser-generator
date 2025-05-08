@@ -14,7 +14,18 @@ export default function CurriculumAnalisys() {
   };
 
   if (isLoading) {
-    return <Loader destination="/resources" />;
+    return (
+      <Loader
+        messages={[
+          "📤 Enviando los recursos 📤",
+          "🔍 Extrayendo información de los recursos 🔍",
+          "📝 Generando secciones optimas 📝",
+          "✨ ¡Algo genial esta por generarse! ✨",
+          "⏳ Un poco más para tener lista la abstracción... ⏳",
+        ]}
+        interval={3000}
+      />
+    );
   }
 
   return (

@@ -28,6 +28,15 @@ export const ariaLabels = {
   removeFile: "Eliminar archivo",
 };
 
+export const loaderMessages = {
+  sendingResources: "📤 Enviando los recursos 📤",
+  extractingInformation: "🔍 Extrayendo información de los recursos 🔍",
+  abstractingInformation: "🧠 Abstrayendo y generando la información 🧠",
+  generatingSections: "📝 Generando secciones optimas 📝",
+  somethingGreat: "✨ ¡Algo genial esta por generarse! ✨",
+  moreTime: "⏳ Un poco más para tener lista la abstracción... ⏳",
+};
+
 export const frontendErrorsLabels = {
   errorProcessing: "Error al procesar la solicitud",
   maximumFiles: `Solo puedes subir hasta ${MAX_FILES} archivos`,

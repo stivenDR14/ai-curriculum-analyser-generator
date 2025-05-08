@@ -6,6 +6,7 @@ import {
   frontendErrorsLabels,
   landingPageCurriculumLabels,
   landingPageHiringLabels,
+  loaderMessages,
 } from "@/utils/labels";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
@@ -13,7 +14,7 @@ import { Title, Subtitle } from "@/components/Typography";
 import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
 import { MAX_FILES } from "@/utils/constants";
 import { showToast } from "@/components/Toast";
-
+import { useRouter } from "next/navigation";
 const MAX_CHARACTERS = 2000;
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
   const [disableSelectFile, setDisableSelectFile] = useState(false);
   const [recruiterText, setRecruiterText] = useState("");
   const [cvText, setCvText] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (!isAnimating) {
@@ -80,7 +82,7 @@ export default function Home() {
 
       const data = await response.json();
       showToast.success(data.message);
-      // Aquí puedes manejar la respuesta exitosa
+      router.push(isRecruiter ? "/resources" : "/curriculum-analisys");
     } catch (error: unknown) {
       console.error("Error:", error);
       showToast.error(frontendErrorsLabels.uploadError);
@@ -118,7 +120,16 @@ export default function Home() {
   if (isLoading) {
     return (
       <Loader
-        destination={isRecruiter ? "/resources" : "/curriculum-analisys"}
+        messages={[
+          loaderMessages.sendingResources,
+          loaderMessages.extractingInformation,
+          isRecruiter
+            ? loaderMessages.abstractingInformation
+            : loaderMessages.generatingSections,
+          loaderMessages.somethingGreat,
+          loaderMessages.moreTime,
+        ]}
+        interval={isRecruiter ? 3000 : 5000}
       />
     );
   }
