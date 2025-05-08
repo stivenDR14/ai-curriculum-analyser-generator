@@ -1,8 +1,6 @@
-export const MAX_FILES = 2;
-export const MAX_SIZE_FILES = 1000000;
-export const MAX_MG_ALLOWED = "1MB";
+"use server";
 
-export const PROMPT_RESUME_REWRITE = (language: string) => `
+export const PROMPT_RESUME_REWRITE = async (language: string) => `
 
 You are an expert resume writer specializing in optimizing resumes for Applicant Tracking Systems (ATS). 
 

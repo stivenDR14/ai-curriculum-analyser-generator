@@ -1,0 +1,7 @@
+export const MAX_FILES = 3;
+export const MAX_SIZE_FILES = 1000000;
+export const MAX_MG_ALLOWED = "1MB";
+
+export const RECRUITER_MODE_KEY = "isRecruiterMode";
+export const RESUME_DATA_KEY = "resumeData";
+export const RESUME_DATA_KEY_RECRUITER = "vacancyData";

@@ -9,7 +9,7 @@ import {
   Message,
   ConverseCommandInput,
 } from "@aws-sdk/client-bedrock-runtime";
-import { PROMPT_RESUME_REWRITE } from "@/utils/constants";
+import { PROMPT_RESUME_REWRITE } from "@/utils/constants-server";
 
 type AnalysisType = "vacancy" | "curriculum";
 
@@ -142,7 +142,7 @@ export async function handleAnalysis(
       ] as Message[],
       system: [
         {
-          text: PROMPT_RESUME_REWRITE(language),
+          text: await PROMPT_RESUME_REWRITE(language),
         },
       ],
       inferenceConfig: {

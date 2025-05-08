@@ -5,12 +5,21 @@ import styles from "./page.module.css";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
 import { Title, Description, SectionTitle } from "@/components/Typography";
-
+import { curriculumAnalisysLabels } from "@/utils/labels";
+import { useRouter } from "next/navigation";
+import { RESUME_DATA_KEY } from "@/utils/constants-all";
 export default function CurriculumAnalisys() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleContinue = () => {
     setIsLoading(true);
+  };
+
+  const handleReset = () => {
+    router.push("/");
+    //delete from the local storage the resume data
+    localStorage.removeItem(RESUME_DATA_KEY);
   };
 
   if (isLoading) {
@@ -80,7 +89,13 @@ export default function CurriculumAnalisys() {
 
       <div className={styles.actionContainer}>
         <Button onClick={handleContinue} variant="primary">
-          Guardar y Continuar
+          {curriculumAnalisysLabels.continueButtonText}
+        </Button>
+      </div>
+
+      <div className={styles.actionContainer}>
+        <Button onClick={handleReset} variant="switch">
+          {curriculumAnalisysLabels.rejectAndUploadOther}
         </Button>
       </div>
     </main>

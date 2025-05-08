@@ -1,11 +1,11 @@
-import { MAX_FILES, MAX_MG_ALLOWED } from "./constants";
+import { MAX_FILES, MAX_MG_ALLOWED } from "./constants-all";
 
 export const landingPageCurriculumLabels = {
   title:
     "Convierte tu hoja de vida en tu mejor herramienta con ayuda de la inteligencia artificial.",
   subtitle:
     "Ahorra tiempo personalizando tu CV, tu carta de presentación y prepárate para cada oferta laboral.",
-  dragText: "También puedes arrastrar un archivo en formato PDF o",
+  dragText: `También puedes arrastrar hasta ${MAX_FILES} archivos en formato PDF o`,
   selectText: " selecciona ",
   selectFromText: "desde tus archivos",
   uploadInfo:
@@ -21,7 +21,7 @@ export const landingPageHiringLabels = {
   placeholderText:
     "Recuerda agregar empresa, rol, descripción, rango salarial, etc",
   analyzeButtonText: "Analizar Vacante",
-  switchText: "O, crea tu vacante",
+  switchText: "Quiero optimizar mi CV",
 };
 
 export const ariaLabels = {
@@ -54,4 +54,9 @@ export const backendErrorsLabels = {
 export const backendSuccessLabels = {
   curriculumAnalyzed: "Curriculum data received successfully",
   vacancyAnalyzed: "Vacancy data received successfully",
+};
+
+export const curriculumAnalisysLabels = {
+  continueButtonText: "Guardar y Continuar",
+  rejectAndUploadOther: "Rechazar y subir otro CV",
 };

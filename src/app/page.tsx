@@ -12,13 +12,15 @@ import Loader from "@/components/Loader";
 import Button from "@/components/Button";
 import { Title, Subtitle } from "@/components/Typography";
 import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
-import { MAX_FILES } from "@/utils/constants";
+import { MAX_FILES } from "@/utils/constants-all";
 import { showToast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
+import { useDocuments } from "@/hooks/documents.hook";
 const MAX_CHARACTERS = 2000;
 
 export default function Home() {
-  const [isRecruiter, setIsRecruiter] = useState(false);
+  const router = useRouter();
+  const { isRecruiter, setIsRecruiter, saveResumeData } = useDocuments(router);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showRecruiter, setShowRecruiter] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +28,6 @@ export default function Home() {
   const [disableSelectFile, setDisableSelectFile] = useState(false);
   const [recruiterText, setRecruiterText] = useState("");
   const [cvText, setCvText] = useState("");
-  const router = useRouter();
 
   useEffect(() => {
     if (!isAnimating) {
@@ -81,7 +82,8 @@ export default function Home() {
       }
 
       const data = await response.json();
-      showToast.success(data.message);
+      saveResumeData(data, isRecruiter);
+
       router.push(isRecruiter ? "/resources" : "/curriculum-analisys");
     } catch (error: unknown) {
       console.error("Error:", error);

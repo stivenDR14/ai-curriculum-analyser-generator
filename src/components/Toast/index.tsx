@@ -6,7 +6,7 @@ export const showToast = {
   success: (message: string) => {
     toast.success(message, {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -19,7 +19,7 @@ export const showToast = {
   error: (message: string) => {
     toast.error(message, {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -32,7 +32,7 @@ export const showToast = {
   warning: (message: string) => {
     toast.warning(message, {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -45,7 +45,7 @@ export const showToast = {
   info: (message: string) => {
     toast.info(message, {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -61,7 +61,7 @@ export default function Toast() {
   return (
     <ToastContainer
       position="top-right"
-      autoClose={3000}
+      autoClose={5000}
       hideProgressBar={false}
       newestOnTop
       closeOnClick
