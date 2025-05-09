@@ -61,12 +61,13 @@
 }
 
 .loadingText {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vw, 1.2rem);
   color: #333;
   margin: 0;
   transition: all 0.5s ease;
   display: inline-block;
-  white-space: nowrap;
+  word-break: break-word;
+  text-align: center;
 }
 
 .visible {
@@ -112,5 +113,15 @@
   to {
     opacity: 0;
     transform: translateX(-100%);
+  }
+}
+
+@media (max-width: 480px) {
+  .textContainer {
+    max-width: 95vw;
+    padding: 0 0.5rem;
+  }
+  .loadingText {
+    font-size: 1rem;
   }
 }

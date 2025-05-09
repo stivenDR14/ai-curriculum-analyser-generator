@@ -40,3 +40,18 @@
   font-weight: 600;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .characterCount {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .characterCount {
+    font-size: 0.7rem;
+    padding: 0.3rem;
+    margin: 0.3rem;
+  }
+}

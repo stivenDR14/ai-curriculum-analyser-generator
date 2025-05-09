@@ -106,7 +106,6 @@ export default function Home() {
     }
   };
 
-  // Clases para ambas vistas
   const recruiterClasses = `${styles.landingPage} ${
     !isAnimating && showRecruiter
       ? styles.landingPageEnter
