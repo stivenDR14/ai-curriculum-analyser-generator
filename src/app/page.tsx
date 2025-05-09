@@ -15,7 +15,7 @@ import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
 import { MAX_FILES } from "@/utils/constants-all";
 import { showToast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
-import { useDocuments } from "@/hooks/documents.hook";
+import { useDocuments } from "@/hooks/useDocuments.hook";
 const MAX_CHARACTERS = 2000;
 
 export default function Home() {

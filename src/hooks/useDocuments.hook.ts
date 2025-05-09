@@ -6,7 +6,7 @@ import {
   RESUME_DATA_KEY_RECRUITER,
 } from "@/utils/constants-all";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { IResume, IVacancy } from "@/models/resume";
+import { IResume } from "@/models/resume";
 import { useResumeStore } from "./useResumeStore";
 
 interface IResponse {
@@ -21,7 +21,7 @@ interface ResumeData {
 }
 
 interface VacancyData {
-  vacancy: IVacancy;
+  vacancy: string;
   error?: string;
 }
 
@@ -64,14 +64,14 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
     if (isRecruiter) {
       showToast.success(data.message);
       localStorage.setItem(
-        isRecruiter ? RESUME_DATA_KEY_RECRUITER : RESUME_DATA_KEY,
+        RESUME_DATA_KEY_RECRUITER,
         JSON.stringify((data.data as VacancyData).vacancy)
       );
     } else {
       showToast.success(data.message);
       setResumeData((data.data as ResumeData).resume);
       localStorage.setItem(
-        isRecruiter ? RESUME_DATA_KEY_RECRUITER : RESUME_DATA_KEY,
+        RESUME_DATA_KEY,
         JSON.stringify((data.data as ResumeData).resume)
       );
     }
@@ -79,7 +79,9 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
 
   const getResumeData = (): ResumeData | null => {
     if (typeof window !== "undefined") {
-      const savedData = localStorage.getItem(RESUME_DATA_KEY);
+      const savedData = localStorage.getItem(
+        isRecruiter ? RESUME_DATA_KEY_RECRUITER : RESUME_DATA_KEY
+      );
       return savedData ? JSON.parse(savedData) : null;
     }
     return null;

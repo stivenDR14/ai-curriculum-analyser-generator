@@ -9,7 +9,10 @@ import {
   Message,
   ConverseCommandInput,
 } from "@aws-sdk/client-bedrock-runtime";
-import { PROMPT_RESUME_REWRITE } from "@/utils/constants-server";
+import {
+  PROMPT_RESUME_REWRITE,
+  PROMPT_VACANCY_REWRITE,
+} from "@/utils/constants-server";
 
 type AnalysisType = "vacancy" | "curriculum";
 
@@ -77,7 +80,42 @@ export async function handleAnalysis(
           role: ConversationRole.USER,
           content: [
             {
-              text: `
+              text:
+                type === "vacancy"
+                  ? `
+                Now, take the the information that is added below and rewrite it using the structure and best practices above:
+                
+                ${
+                  text
+                    ? `
+                *Text resources*
+                ${text} 
+                -----
+                `
+                    : ""
+                }
+
+                ${
+                  files.length > 0
+                    ? `
+                *Files resources*
+                ${files.map((file) => file.name).join("\n")}
+                -----
+                `
+                    : ""
+                }
+
+                
+                please provide the response in the following JSON format:
+                {
+                  "vacancy": "string",
+                  "error": "string"
+                }
+
+                the whole text must be written in ${language}.
+
+                `
+                  : `
                        
                 Now, take the resume, descriptions, resources and all the information that you have below and rewrite it using the structure and best practices above:
 
@@ -143,7 +181,10 @@ export async function handleAnalysis(
       ] as Message[],
       system: [
         {
-          text: await PROMPT_RESUME_REWRITE(language),
+          text:
+            type === "vacancy"
+              ? await PROMPT_VACANCY_REWRITE(language)
+              : await PROMPT_RESUME_REWRITE(language),
         },
       ],
       inferenceConfig: {
@@ -173,9 +214,17 @@ export async function handleAnalysis(
         responseText.match(/```json\n([\s\S]*?)\n```/) ||
         responseText.match(/```\n([\s\S]*?)\n```/) ||
         responseText.match(/{[\s\S]*?}/);
-
-      if (jsonMatch) {
-        jsonResponse = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+      const jsonMatchAux = (jsonMatch?.[1] || jsonMatch?.[0])
+        ?.replace(/[\[\]]/g, "_")
+        // Escapa los saltos de línea dentro de los valores de string
+        .replace(/:\s*"(.*?)"/g, (match, p1) => {
+          // Escapa los saltos de línea y comillas dentro del valor
+          const escaped = p1.replace(/\n/g, "\\n").replace(/"/g, '\\"');
+          return `: "${escaped}"`;
+        });
+      console.log("jsonMatchAux", jsonMatchAux);
+      if (jsonMatchAux) {
+        jsonResponse = JSON.parse(jsonMatchAux);
       } else {
         throw new Error("No JSON found in response");
       }
