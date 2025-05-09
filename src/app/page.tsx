@@ -9,13 +9,12 @@ import {
   loaderMessages,
 } from "@/utils/labels";
 import Loader from "@/components/Loader";
-import Button from "@/components/Button";
-import { Title, Subtitle } from "@/components/Typography";
-import UploadArea, { SelectText, UploadInfo } from "@/components/UploadArea";
 import { MAX_FILES } from "@/utils/constants-all";
 import { showToast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
 import { useDocuments } from "@/hooks/useDocuments.hook";
+import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
+import VacancyUploadExtractor from "@/components/Extractor/VacancyUploadExtractor";
 const MAX_CHARACTERS = 2000;
 
 export default function Home() {
@@ -157,87 +156,46 @@ export default function Home() {
   return (
     <main className={styles.mainContent}>
       <div className={recruiterClasses}>
-        <Title>{landingPageHiringLabels.title}</Title>
-        <Subtitle>{landingPageHiringLabels.subtitle}</Subtitle>
-
-        <UploadArea
+        <VacancyUploadExtractor
+          title={landingPageHiringLabels.title}
+          subtitle={landingPageHiringLabels.subtitle}
           uploadedFiles={uploadedFiles}
           setUploadedFiles={setUploadedFiles}
-        >
-          <div className={styles.textAreaContainer}>
-            <textarea
-              autoFocus
-              className={styles.vacancyTextarea}
-              placeholder={landingPageHiringLabels.placeholderText}
-              value={recruiterText}
-              onChange={(e) => handleTextChange(e, true)}
-              maxLength={MAX_CHARACTERS}
-            ></textarea>
-            <div className={styles.characterCount}>
-              {recruiterText.length}/{MAX_CHARACTERS}
-            </div>
-          </div>
-          <UploadInfo>
-            {landingPageCurriculumLabels.dragText}
-            <SelectText
-              onClick={handleSelectFile}
-              className={disableSelectFile ? styles.disabled : ""}
-            >
-              {landingPageCurriculumLabels.selectText}
-            </SelectText>
-            {landingPageCurriculumLabels.selectFromText}
-          </UploadInfo>
-        </UploadArea>
-
-        <Button onClick={() => handleAnalyze("vacancy")} variant="primary">
-          {landingPageHiringLabels.analyzeButtonText}
-        </Button>
-
-        <Button onClick={toggleView} variant="switch">
-          {landingPageHiringLabels.switchText}
-        </Button>
+          recruiterText={recruiterText}
+          onRecruiterTextChange={(e) => handleTextChange(e, true)}
+          maxCharacters={MAX_CHARACTERS}
+          handleAnalyze={() => handleAnalyze("vacancy")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
+          dragText={landingPageCurriculumLabels.dragText}
+          selectText={landingPageCurriculumLabels.selectText}
+          selectFromText={landingPageCurriculumLabels.selectFromText}
+          placeholderText={landingPageHiringLabels.placeholderText}
+          analyzeButtonText={landingPageHiringLabels.analyzeButtonText}
+          switchText={landingPageHiringLabels.switchText}
+          onSwitch={toggleView}
+        />
       </div>
-
       <div className={cvClasses}>
-        <Title>{landingPageCurriculumLabels.title}</Title>
-        <Subtitle>{landingPageCurriculumLabels.subtitle}</Subtitle>
-
-        <UploadArea
+        <CurriculumUploadExtractor
+          title={landingPageCurriculumLabels.title}
+          subtitle={landingPageCurriculumLabels.subtitle}
           uploadedFiles={uploadedFiles}
           setUploadedFiles={setUploadedFiles}
-        >
-          <div className={styles.textAreaContainer}>
-            <textarea
-              autoFocus
-              className={styles.vacancyTextarea}
-              placeholder={landingPageCurriculumLabels.uploadInfo}
-              value={cvText}
-              onChange={(e) => handleTextChange(e, false)}
-              maxLength={MAX_CHARACTERS}
-            ></textarea>
-            <div className={styles.characterCount}>
-              {cvText.length}/{MAX_CHARACTERS}
-            </div>
-          </div>
-          <UploadInfo>
-            {landingPageCurriculumLabels.dragText}
-            <SelectText
-              onClick={handleSelectFile}
-              className={disableSelectFile ? styles.disabled : ""}
-            >
-              {landingPageCurriculumLabels.selectText}
-            </SelectText>
-            {landingPageCurriculumLabels.selectFromText}
-          </UploadInfo>
-        </UploadArea>
-
-        <Button onClick={() => handleAnalyze("curriculum")} variant="primary">
-          {landingPageCurriculumLabels.analyzeButtonText}
-        </Button>
-
-        <Button onClick={toggleView} variant="switch">
-          {landingPageCurriculumLabels.switchText}
-        </Button>
+          cvText={cvText}
+          onCvTextChange={(e) => handleTextChange(e, false)}
+          maxCharacters={MAX_CHARACTERS}
+          handleAnalyze={() => handleAnalyze("curriculum")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
+          dragText={landingPageCurriculumLabels.dragText}
+          selectText={landingPageCurriculumLabels.selectText}
+          selectFromText={landingPageCurriculumLabels.selectFromText}
+          uploadInfo={landingPageCurriculumLabels.uploadInfo}
+          analyzeButtonText={landingPageCurriculumLabels.analyzeButtonText}
+          switchText={landingPageCurriculumLabels.switchText}
+          onSwitch={toggleView}
+        />
       </div>
     </main>
   );
