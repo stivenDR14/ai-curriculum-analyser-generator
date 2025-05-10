@@ -3,7 +3,7 @@ import { showToast } from "@/components/Toast";
 import {
   RECRUITER_MODE_KEY,
   RESUME_DATA_KEY,
-  RESUME_DATA_KEY_RECRUITER,
+  VACANCY_DATA_KEY,
 } from "@/utils/constants-all";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { IResume } from "@/models/resume";
@@ -64,7 +64,7 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
     if (isRecruiter) {
       showToast.success(data.message);
       localStorage.setItem(
-        RESUME_DATA_KEY_RECRUITER,
+        VACANCY_DATA_KEY,
         JSON.stringify((data.data as VacancyData).vacancy)
       );
     } else {
@@ -80,7 +80,7 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
   const getResumeData = (): ResumeData | null => {
     if (typeof window !== "undefined") {
       const savedData = localStorage.getItem(
-        isRecruiter ? RESUME_DATA_KEY_RECRUITER : RESUME_DATA_KEY
+        isRecruiter ? VACANCY_DATA_KEY : RESUME_DATA_KEY
       );
       return savedData ? JSON.parse(savedData) : null;
     }

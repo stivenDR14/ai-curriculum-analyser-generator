@@ -60,13 +60,10 @@ export default function CurriculumAnalisys() {
 
   return (
     <main className={styles.container}>
-      <Title centered>
-        ¡Bien!, hemos terminado de analizar y extraer tu información
-      </Title>
+      <Title centered>{curriculumAnalisysLabels.analysisSuccess}</Title>
 
       <Description centered>
-        Hemos logrado un 95% de precisión en la extracción. Hemos generado las
-        siguientes secciones
+        {curriculumAnalisysLabels.analysisSuccessDescription}
       </Description>
 
       <article>

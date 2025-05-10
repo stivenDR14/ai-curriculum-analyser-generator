@@ -79,9 +79,11 @@ const VacancyUploadExtractor: React.FC<VacancyUploadExtractorProps> = ({
       <Button onClick={handleAnalyze} variant="primary">
         {analyzeButtonText}
       </Button>
-      <Button onClick={onSwitch} variant="switch">
-        {switchText}
-      </Button>
+      {switchText !== "" && (
+        <Button onClick={onSwitch} variant="switch">
+          {switchText}
+        </Button>
+      )}
     </>
   );
 };

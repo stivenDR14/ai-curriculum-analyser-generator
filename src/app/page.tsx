@@ -15,8 +15,8 @@ import { useRouter } from "next/navigation";
 import { useDocuments } from "@/hooks/useDocuments.hook";
 import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
 import VacancyUploadExtractor from "@/components/Extractor/VacancyUploadExtractor";
-const MAX_CHARACTERS = 2000;
-
+import { useSettingsStore } from "@/hooks/useSettingsStore";
+import { MAX_CHARACTERS } from "@/utils/constants-all";
 export default function Home() {
   const router = useRouter();
   const { isRecruiter, setIsRecruiter, saveResumeData } = useDocuments(router);
@@ -27,6 +27,7 @@ export default function Home() {
   const [disableSelectFile, setDisableSelectFile] = useState(false);
   const [recruiterText, setRecruiterText] = useState("");
   const [cvText, setCvText] = useState("");
+  const setSettingData = useSettingsStore((state) => state.setIsRecruiter);
 
   useEffect(() => {
     if (!isAnimating) {
@@ -47,7 +48,7 @@ export default function Home() {
 
     setTimeout(() => {
       setIsRecruiter(!isRecruiter);
-
+      setSettingData(!isRecruiter);
       setTimeout(() => {
         setIsAnimating(false);
       }, 100);
