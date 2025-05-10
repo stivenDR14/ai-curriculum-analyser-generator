@@ -8,6 +8,7 @@ import { useResumeStore } from "@/hooks/use-resumeStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
+import { vacancyLabels } from "@/utils/labels";
 export default function Vacancy() {
   const vacancyData = useResumeStore((state) => state.vacancyData);
   const loadVacancyFromStorage = useResumeStore(
@@ -46,38 +47,38 @@ export default function Vacancy() {
   if (!vacancyData) {
     return (
       <main className={styles.container}>
-        <Loader messages={["Cargando"]} />
+        <Loader messages={vacancyLabels.loaderMessages} />
       </main>
     );
   }
 
   return (
     <main className={styles.container}>
-      <Title centered>{`La vacante extraida es la siguiente`}</Title>(
+      <Title centered>{vacancyLabels.title}</Title>
       <div>
         <CardSection
           isSuggestion
-          title={"Sugerencias"}
+          title={vacancyLabels.suggestionTitle}
           content={suggestions}
           icon="💡"
           handleEdit={() => {}}
         />
         <CardSection
-          title={"Tu vacante"}
+          title={vacancyLabels.vacancyTitle}
           content={vacancyData}
           icon="📝"
           handleEdit={() => {}}
         />
       </div>
-      )
+
       <div className={styles.actionContainer}>
         <Button variant="primary" onClick={handleContinue}>
-          Continuar
+          {vacancyLabels.continueButtonText}
         </Button>
       </div>
       <div className={styles.actionContainer}>
         <Button variant="switch" onClick={handleReset}>
-          {"Rechazar y subir otra vacante"}
+          {vacancyLabels.rejectAndUploadOther}
         </Button>
       </div>
     </main>

@@ -35,7 +35,13 @@ interface UseDocumentsReturn {
   getResumeData: () => ResumeData | null;
 }
 
-export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
+export const useDocuments = ({
+  router,
+  isHome,
+}: {
+  router: AppRouterInstance;
+  isHome: boolean;
+}): UseDocumentsReturn => {
   const [isRecruiter, setIsRecruiter] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       const savedMode = localStorage.getItem(RECRUITER_MODE_KEY);
@@ -51,11 +57,13 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
   }, [isRecruiter]);
 
   useEffect(() => {
-    if (getResumeData() && !isRecruiter) {
-      router.push("/curriculum-analisys");
-    }
-    if (getResumeData() && isRecruiter) {
-      router.push("/vacancy");
+    if (isHome) {
+      if (getResumeData() && !isRecruiter) {
+        router.push("/curriculum-analisys");
+      }
+      if (getResumeData() && isRecruiter) {
+        router.push("/vacancy");
+      }
     }
   }, [isRecruiter]);
 

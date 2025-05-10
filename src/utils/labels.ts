@@ -74,6 +74,30 @@ export const curriculumAnalisysLabels = {
     "Hemos logrado un 95% de precisión en la extracción. Hemos generado las siguientes secciones",
 };
 
+export const vacancyLabels = {
+  continueButtonText: "Continuar a extraer la información de la vacante",
+  rejectAndUploadOther: "Rechazar y subir otra vacante",
+  title: "La vacante extraida es la siguiente",
+  suggestionTitle: "Sugerencias",
+  vacancyTitle: "Tu vacante",
+  loaderMessages: ["Cargando"],
+};
+
+export const resourcesLabels = {
+  titleRecruiter: "Incluye la hoja de vida del candidato",
+  subtitleRecruiter:
+    "En el campo a continuación, puedes incluir la hoja de vida del candidato, ya sea ingresando el texto, o archivos PDF que contengan información de la persona",
+  uploadInfoRecruiter:
+    "Sube el texto de tu hoja de vida o copia y pega el texto aquí. Asegúrate de que esté actualizada.",
+  continueButtonTextRecruiter: "Continuar y generar reporte",
+  rejectAndUploadOtherRecruiter: "Volver a revisar la vacante",
+  titleCandidate: "¿A qué te quieres postular?",
+  subtitleCandidate:
+    "En el campo a continuación, puedes incluir la descripción de la vacante, ya sea ingresando el texto, o archivos PDF que contengan información de la empresa, la descripcion del trabajo o incluso unviersidad y la vacante de grado",
+  continueButtonTextCandidate: "Continuar y generar reporte y documentos",
+  rejectAndUploadOtherCandidate: "Volver a revisar la hoja de vida",
+};
+
 export const stepperLabels = {
   step11: "Hoja de vida",
   step12: "Vacante",

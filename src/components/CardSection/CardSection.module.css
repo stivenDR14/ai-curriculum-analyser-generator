@@ -9,13 +9,8 @@
 }
 
 .suggestionSection {
-  background: linear-gradient(
-    45deg,
-    #f0f0f0,
-    #4f8cff,
-    #e0e0e0c9,
-    rgb(165, 191, 202)
-  );
+  background: linear-gradient(45deg, #f0f0f0, #788ce6, #e0e0e0c9, #96a4e0ff);
+
   background-size: 200% 200%;
   animation: moveBackground 6s ease-in-out infinite alternate;
 }
