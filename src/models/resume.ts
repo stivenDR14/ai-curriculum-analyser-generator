@@ -8,14 +8,3 @@ export interface IResume {
   skills: string;
   certifications: string;
 }
-
-export interface IVacancy {
-  title: string;
-  industry: string;
-  description: string;
-  requirements: string;
-  benefits: string;
-  salary: string;
-  location: string;
-  company: string;
-}

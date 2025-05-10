@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import styles from "./layout.module.css";
 import Toast from "@/components/Toast";
+import Stepper from "@/components/Stepper/Stepper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,10 @@ export default function RootLayout({
             <div className={styles.advertisementSpace}></div>
           </div>
 
-          <div className={styles.mainContentWrapper}>{children}</div>
+          <div className={styles.mainContentWrapper}>
+            <Stepper />
+            {children}
+          </div>
 
           <div className={styles.advertisementColumn}>
             <div className={styles.advertisementSpace}></div>

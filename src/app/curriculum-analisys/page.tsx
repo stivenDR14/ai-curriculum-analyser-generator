@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import styles from "./page.module.css";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
@@ -8,16 +8,20 @@ import { Title, Description } from "@/components/Typography";
 import { curriculumAnalisysLabels } from "@/utils/labels";
 import { useRouter } from "next/navigation";
 import CardSection from "@/components/CardSection/CardSection";
-import { useResumeStore } from "@/hooks/useResumeStore";
+import { useResumeStore } from "@/hooks/use-resumeStore";
 
 export default function CurriculumAnalisys() {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const resumeData = useResumeStore((state) => state.resumeData);
   const loadResumeFromStorage = useResumeStore(
     (state) => state.loadResumeFromStorage
   );
   const clearResumeData = useResumeStore((state) => state.clearResumeData);
+  const suggestions = useResumeStore((state) => state.suggestions);
+  const clearSuggestions = useResumeStore((state) => state.clearSuggestions);
+  const loadSuggestionsFromStorage = useResumeStore(
+    (state) => state.loadSuggestionsFromStorage
+  );
 
   useEffect(() => {
     if (!resumeData) {
@@ -25,30 +29,21 @@ export default function CurriculumAnalisys() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!suggestions) {
+      loadSuggestionsFromStorage();
+    }
+  }, []);
+
   const handleContinue = () => {
-    setIsLoading(true);
+    router.push("/resources");
   };
 
   const handleReset = () => {
     router.push("/");
     clearResumeData();
-    localStorage.removeItem("resumeData");
+    clearSuggestions();
   };
-
-  if (isLoading) {
-    return (
-      <Loader
-        messages={[
-          "📤 Enviando los recursos 📤",
-          "🔍 Extrayendo información de los recursos 🔍",
-          "📝 Generando secciones optimas 📝",
-          "✨ ¡Algo genial esta por generarse! ✨",
-          "⏳ Un poco más para tener lista la abstracción... ⏳",
-        ]}
-        interval={3000}
-      />
-    );
-  }
 
   if (!resumeData) {
     return (
@@ -60,16 +55,20 @@ export default function CurriculumAnalisys() {
 
   return (
     <main className={styles.container}>
-      <Title centered>
-        ¡Bien!, hemos terminado de analizar y extraer tu información
-      </Title>
+      <Title centered>{curriculumAnalisysLabels.analysisSuccess}</Title>
 
       <Description centered>
-        Hemos logrado un 95% de precisión en la extracción. Hemos generado las
-        siguientes secciones
+        {curriculumAnalisysLabels.analysisSuccessDescription}
       </Description>
 
       <article>
+        <CardSection
+          title={curriculumAnalisysLabels.suggestions}
+          content={suggestions}
+          isSuggestion
+          icon="💡"
+          handleEdit={() => {}}
+        />
         <CardSection
           title={curriculumAnalisysLabels.professionalTitle}
           content={resumeData.title}

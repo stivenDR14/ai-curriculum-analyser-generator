@@ -8,6 +8,30 @@
   box-sizing: border-box;
 }
 
+.suggestionSection {
+  background: linear-gradient(
+    45deg,
+    #f0f0f0,
+    #4f8cff,
+    #e0e0e0c9,
+    rgb(165, 191, 202)
+  );
+  background-size: 200% 200%;
+  animation: moveBackground 6s ease-in-out infinite alternate;
+}
+
+@keyframes moveBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .icon {
   margin-right: 0.5rem;
 }
@@ -25,6 +49,44 @@
   width: 100%;
   box-sizing: border-box;
   overflow-wrap: break-word;
+  position: relative;
+}
+
+.collapsed .markdownContent {
+  max-height: 120px; /* Aproximadamente 3 líneas de texto */
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+.expanded .markdownContent {
+  max-height: none;
+}
+
+.expandButton {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+  background-color: #f6f7f9;
+  border: 1px solid #e0e0e0;
+  color: #6755d0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.expandButton:hover {
+  background-color: #efefef;
+  color: #5644c0;
+}
+
+.collapsed .expandButton {
+  background-color: rgba(246, 247, 249, 0.9);
+  backdrop-filter: blur(2px);
 }
 
 .markdownContent {
@@ -32,6 +94,7 @@
   line-height: 1.6;
   color: #333;
   overflow-wrap: break-word;
+  transition: max-height 0.3s ease-out;
 }
 
 .markdownContent h1,

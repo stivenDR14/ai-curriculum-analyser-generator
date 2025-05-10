@@ -9,7 +9,10 @@ import {
   Message,
   ConverseCommandInput,
 } from "@aws-sdk/client-bedrock-runtime";
-import { PROMPT_RESUME_REWRITE } from "@/utils/constants-server";
+import {
+  PROMPT_RESUME_REWRITE,
+  PROMPT_VACANCY_REWRITE,
+} from "@/utils/constants-server";
 
 type AnalysisType = "vacancy" | "curriculum";
 
@@ -77,7 +80,43 @@ export async function handleAnalysis(
           role: ConversationRole.USER,
           content: [
             {
-              text: `
+              text:
+                type === "vacancy"
+                  ? `
+                Now, take the the information that is added below and rewrite it using the structure and best practices above:
+                
+                ${
+                  text
+                    ? `
+                *Text resources*
+                ${text} 
+                -----
+                `
+                    : ""
+                }
+
+                ${
+                  files.length > 0
+                    ? `
+                *Files resources*
+                ${files.map((file) => file.name).join("\n")}
+                -----
+                `
+                    : ""
+                }
+
+                
+                please provide the response in the following JSON format:
+                {
+                  "vacancy": "string",
+                  "suggestions": "string",
+                  "error": "string"
+                }
+
+                the whole text must be written in ${language}.
+
+                `
+                  : `
                        
                 Now, take the resume, descriptions, resources and all the information that you have below and rewrite it using the structure and best practices above:
 
@@ -121,6 +160,7 @@ export async function handleAnalysis(
                     "education": "string",
                     "certifications": "string"
                   },
+                  "suggestions": "string",
                   "error": "string"
                 }
 
@@ -143,7 +183,10 @@ export async function handleAnalysis(
       ] as Message[],
       system: [
         {
-          text: await PROMPT_RESUME_REWRITE(language),
+          text:
+            type === "vacancy"
+              ? await PROMPT_VACANCY_REWRITE(language)
+              : await PROMPT_RESUME_REWRITE(language),
         },
       ],
       inferenceConfig: {
@@ -173,9 +216,17 @@ export async function handleAnalysis(
         responseText.match(/```json\n([\s\S]*?)\n```/) ||
         responseText.match(/```\n([\s\S]*?)\n```/) ||
         responseText.match(/{[\s\S]*?}/);
-
-      if (jsonMatch) {
-        jsonResponse = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+      const jsonMatchAux = (jsonMatch?.[1] || jsonMatch?.[0])
+        ?.replace(/[\[\]]/g, "_")
+        // Escapa los saltos de línea dentro de los valores de string
+        .replace(/:\s*"(.*?)"/g, (match, p1) => {
+          // Escapa los saltos de línea y comillas dentro del valor
+          const escaped = p1.replace(/\n/g, "\\n").replace(/"/g, '\\"');
+          return `: "${escaped}"`;
+        });
+      console.log("jsonMatchAux", jsonMatchAux);
+      if (jsonMatchAux) {
+        jsonResponse = JSON.parse(jsonMatchAux);
       } else {
         throw new Error("No JSON found in response");
       }
@@ -214,3 +265,119 @@ export async function handleAnalysis(
     );
   }
 }
+
+/* try {
+      // Buscar el contenido JSON entre los marcadores de código
+      const jsonMatch =
+        responseText.match(/```json\n([\s\S]*?)\n```/) ||
+        responseText.match(/```\n([\s\S]*?)\n```/) ||
+        responseText.match(/{[\s\S]*?}/);
+
+      let jsonString = jsonMatch?.[1] || jsonMatch?.[0];
+
+      if (jsonString) {
+        // Limpieza básica: eliminar caracteres problemáticos
+        jsonString = jsonString.replace(/[\u0000-\u0019]/g, ""); // Eliminar caracteres de control
+
+        // Intentar parsear el JSON limpio usando múltiples métodos
+        try {
+          // Método 1: Parseo directo
+          jsonResponse = JSON.parse(jsonString);
+        } catch (error) {
+          console.error("Standard JSON parse failed:", error);
+
+          try {
+            // Método 2: Extraer y construir el objeto manualmente
+            if (type === "vacancy") {
+              // Extraer todo el contenido entre comillas después de "vacancy": hasta la siguiente comilla
+              const vacancyMatch = responseText.match(
+                /"vacancy"\s*:\s*"([^]*?)"\s*,?\s*"error"/
+              );
+              if (vacancyMatch && vacancyMatch[1]) {
+                jsonResponse = {
+                  vacancy: vacancyMatch[1]
+                    .replace(/\\n/g, "\n")
+                    .replace(/\\"/g, '"'),
+                  error: "",
+                } as VacancyResponse;
+              } else {
+                // Fallback: crear un objeto con el texto completo
+                jsonResponse = {
+                  vacancy: responseText,
+                  error: "",
+                } as VacancyResponse;
+              }
+            } else {
+              // Para currículum, crear un objeto básico
+              const resumeResponse: ResumeResponse = {
+                resume: {
+                  title: "",
+                  contactInformation: "",
+                  professionalSummary: "",
+                  skills: "",
+                  workExperience: "",
+                  projects: "",
+                  education: "",
+                  certifications: "",
+                },
+                error: "",
+              };
+
+              jsonResponse = resumeResponse;
+
+              // Intentar extraer cada sección del texto
+              try {
+                const resumeText = responseText.substring(
+                  responseText.indexOf('"resume"'),
+                  responseText.lastIndexOf("}")
+                );
+
+                const sectionNames = [
+                  "title",
+                  "contactInformation",
+                  "professionalSummary",
+                  "skills",
+                  "workExperience",
+                  "projects",
+                  "education",
+                  "certifications",
+                ] as const;
+
+                sectionNames.forEach((section) => {
+                  const regex = new RegExp(
+                    `"${section}"\\s*:\\s*"([^]*?)(?:"\\s*,|"\\s*})`,
+                    "i"
+                  );
+                  const match = resumeText.match(regex);
+
+                  if (match && match[1] && isResumeResponse(jsonResponse)) {
+                    jsonResponse.resume[
+                      section as keyof typeof jsonResponse.resume
+                    ] = match[1].replace(/\\n/g, "\n").replace(/\\"/g, '"');
+                  }
+                });
+              } catch (extractError) {
+                console.error("Section extraction failed:", extractError);
+              }
+            }
+          } catch (fallbackError) {
+            console.error("All parsing methods failed:", fallbackError);
+            throw new Error(
+              "Failed to parse JSON response after multiple attempts"
+            );
+          }
+        }
+      } else {
+        throw new Error("No JSON found in response");
+      }
+    } catch (error) {
+      console.error("Error parsing JSON response:", error);
+      return NextResponse.json(
+        {
+          success: false,
+          message: backendErrorsLabels.errorProcessingCurriculum,
+          error: "Invalid JSON response from model",
+        },
+        { status: 500 }
+      );
+    } */

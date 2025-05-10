@@ -57,7 +57,7 @@ export const backendSuccessLabels = {
 };
 
 export const curriculumAnalisysLabels = {
-  continueButtonText: "Continuar",
+  continueButtonText: "Continuar a extraer la información de la vacante",
   rejectAndUploadOther: "Rechazar y subir otro CV",
   professionalTitle: "Título profesional sugerido",
   contactInformation: "Información de contacto",
@@ -67,4 +67,18 @@ export const curriculumAnalisysLabels = {
   professionalEducation: "Educación",
   professionalSkills: "Habilidades",
   professionalCertifications: "Certificaciones",
+  suggestions: "Sugerencias",
+  analysisSuccess:
+    "¡Bien!, hemos terminado de analizar y extraer tu información",
+  analysisSuccessDescription:
+    "Hemos logrado un 95% de precisión en la extracción. Hemos generado las siguientes secciones",
+};
+
+export const stepperLabels = {
+  step11: "Hoja de vida",
+  step12: "Vacante",
+  step13: "Documentos",
+  step21: "Vacante",
+  step22: "Candidatos",
+  step23: "Reporte",
 };

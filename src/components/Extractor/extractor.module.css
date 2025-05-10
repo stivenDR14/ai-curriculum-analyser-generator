@@ -1,0 +1,57 @@
+.vacancyTextarea {
+  width: 100%;
+  min-height: 150px;
+  border: none;
+  background: transparent;
+  resize: none;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  padding: 0.5rem;
+  color: #333;
+}
+
+.vacancyTextarea::placeholder {
+  color: #888;
+}
+
+.textAreaContainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.characterCount {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 0.8rem;
+  color: #888;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  margin: 0.5rem;
+}
+
+.disabled {
+  border-color: #ddd;
+  background-color: #f5f5f5;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .characterCount {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .characterCount {
+    font-size: 0.7rem;
+    padding: 0.3rem;
+    margin: 0.3rem;
+  }
+}
