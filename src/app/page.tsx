@@ -12,10 +12,10 @@ import Loader from "@/components/Loader";
 import { MAX_FILES } from "@/utils/constants-all";
 import { showToast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
-import { useDocuments } from "@/hooks/useDocuments.hook";
+import { useDocuments } from "@/hooks/use-documents.hook";
 import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
 import VacancyUploadExtractor from "@/components/Extractor/VacancyUploadExtractor";
-import { useSettingsStore } from "@/hooks/useSettingsStore";
+import { useSettingsStore } from "@/hooks/use-settingsStore";
 import { MAX_CHARACTERS } from "@/utils/constants-all";
 export default function Home() {
   const router = useRouter();
@@ -84,7 +84,7 @@ export default function Home() {
       const data = await response.json();
       saveResumeData(data, isRecruiter);
 
-      router.push(isRecruiter ? "/resources" : "/curriculum-analisys");
+      router.push(isRecruiter ? "/vacancy" : "/curriculum-analisys");
     } catch (error: unknown) {
       console.error("Error:", error);
       showToast.error(frontendErrorsLabels.uploadError);

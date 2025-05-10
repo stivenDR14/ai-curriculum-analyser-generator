@@ -90,7 +90,7 @@ It is mandatory to write it in ${language}.
 It is mandatory to write it in ${language}.
 ---
 
-## 8. Additional Tips for the Rewrite
+## Additional Tips for the Rewrite
 
 - Avoid using tables, images, or any complex formatting.
 - Use standard fonts such as Arial, Calibri, or Times New Roman.
@@ -113,7 +113,7 @@ Requirements for resume:
 - error will be the error message if there is information not allowed for create a proper resume.
 - if there is an error, the original resume and suggested resume will be an empty string.
 - the error must show what is missing or not allowed for create a proper resume.
-
+- the resume fields must be in markdown format without using JSON characters that may damage the markdown format
 - The output must be a JSON object with the following structure:
 
 
@@ -128,6 +128,7 @@ Requirements for resume:
     "education": "string",
     "certifications": "string"
   },
+  "suggestions": "string",
   "error": "string"
 }
 
@@ -141,17 +142,17 @@ Requirements for resume:
    * education: All the education available in the resume with the details of the degree, major, university, city, state, and the graduation year, write it in ${language}
    * certifications: All the certifications or extra courses taken by the person in the resume if there are any, write it in ${language}
    * error: the error message if there is information missing for create a proper resume, write it in ${language}
-
+   * suggestions: the suggestions to improve the resume, write it in ${language}
 `;
 
 export const PROMPT_VACANCY_REWRITE = async (language: string) => `
 You are a professional job description writer specializing in crafting clear, engaging, and inclusive job posts that align with the company's values and attract qualified candidates.
 
-Your task is to generate a complete job description using the information provided below. Focus on creating a well-structured, employer-branded, and appealing job listing that includes all relevant elements.
+Your task is to generate a complete job description or maybe an academic vacancy for a magister or doctorate, using the information provided below. Focus on creating a well-structured, employer-branded, and appealing job listing that includes all relevant elements.
 
 ---
 
-## ✦ Output Format
+## Output Format
 
 The job description should include the following sections:
 
@@ -174,7 +175,7 @@ The job description should include the following sections:
 
 ---
 
-## ✦ Available Resources (Input)
+## Available Resources (Input)
 
 You will be provided with any of the following inputs. Use all relevant data available to enrich each section:
 
@@ -190,16 +191,24 @@ You will be provided with any of the following inputs. Use all relevant data ava
 
 ---
 
-## ✦ Instructions
+## Instructions
 
 - Adapt the tone to match the company culture (e.g., formal, friendly, innovative).
 - Avoid jargon or overly generic phrases.
 - Make the description inclusive and appealing to a diverse audience.
 - Emphasize the impact of the role and what makes the company unique.
 
+
+## Additional Tips for the Rewrite
+
+- Avoid using tables, images, or any complex formatting.
+- Use standard fonts such as Arial, Calibri, or Times New Roman.
+- Avoid headers or footers.
+- Expand acronyms at least once (e.g., "Search Engine Optimization (SEO)").
+- Keep formatting consistent throughout the document.
 ---
 
-Requirements for job description:
+Requirements for the vacancy:
 - Don't make assumptions, only use the information provided.
 - Don't make up information, only use the information provided.
 - Don't add any information that is not provided.
@@ -210,11 +219,12 @@ Requirements for job description:
 
 {
   "vacancy": "string",
-  "error": "string"
+  "error": "string",
+  "suggestions": "string"
 }
 
 description of each field:
-* vacancy: the job description, write it in ${language}
+* vacancy: the job description, write it in ${language}, it must be in markdown format without using JSON characters that may damage the markdown format
 * error: the error message if there is information missing for create a proper job description, write it in ${language}
-
+* suggestions: the suggestions to improve the job description, write it in ${language}
 `;

@@ -2,39 +2,23 @@
 
 import styles from "./page.module.css";
 import Button from "@/components/Button";
-import { Title } from "@/components/Typography";
-import { useSettingsStore } from "@/hooks/useSettingsStore";
-import CardSection from "@/components/CardSection/CardSection";
-import { useResumeStore } from "@/hooks/useResumeStore";
+import { useSettingsStore } from "@/hooks/use-settingsStore";
 import VacancyUploadExtractor from "@/components/Extractor/VacancyUploadExtractor";
-import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
 import { MAX_CHARACTERS } from "@/utils/constants-all";
 import {
   landingPageCurriculumLabels,
   landingPageHiringLabels,
 } from "@/utils/labels";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
 export default function Resources() {
-  const vacancyData = useResumeStore((state) => state.vacancyData);
   const isRecruiter = useSettingsStore((state) => state.isRecruiter);
-  const loadVacancyFromStorage = useResumeStore(
-    (state) => state.loadVacancyFromStorage
-  );
-  const clearVacancyData = useResumeStore((state) => state.clearVacancyData);
-  const router = useRouter();
 
-  useEffect(() => {
-    if (!vacancyData) {
-      loadVacancyFromStorage();
-    }
-  }, []);
+  const router = useRouter();
 
   const handleReset = () => {
     if (isRecruiter) {
-      router.push("/");
-      clearVacancyData();
-      localStorage.removeItem("vacancyData");
+      router.push("/vacancy");
     } else {
       router.push("/curriculum-analisys");
     }
@@ -42,29 +26,16 @@ export default function Resources() {
 
   return (
     <main className={styles.container}>
-      {!isRecruiter && (
-        <Title centered>{`La vacante extraida es la siguiente`}</Title>
-      )}
-
-      {isRecruiter && (
-        <CardSection
-          title={"Your vacancy"}
-          content={vacancyData}
-          icon="📝"
-          handleEdit={() => {}}
-        />
-      )}
-
       {!isRecruiter ? (
         <VacancyUploadExtractor
-          title={""}
+          title={"¿A qué te quieres postular?"}
           subtitle={
             "En el campo a continuación, puedes incluir la descripción de la vacante, ya sea ingresando el texto, o archivos PDF que contengan información de la empresa, la descripcion del trabajo o incluso unviersidad y la vacante de grado"
           }
           uploadedFiles={[]}
           setUploadedFiles={() => {}}
           recruiterText={""}
-          onRecruiterTextChange={(e) => {}}
+          onRecruiterTextChange={() => {}}
           maxCharacters={MAX_CHARACTERS}
           handleAnalyze={() => {}}
           handleSelectFile={() => {}}
@@ -86,7 +57,7 @@ export default function Resources() {
           uploadedFiles={[]}
           setUploadedFiles={() => {}}
           cvText={""}
-          onCvTextChange={(e) => {}}
+          onCvTextChange={() => {}}
           maxCharacters={MAX_CHARACTERS}
           handleAnalyze={() => {}}
           handleSelectFile={() => {}}
@@ -101,10 +72,15 @@ export default function Resources() {
         />
       )}
 
+      {isRecruiter && (
+        <div className={styles.actionContainer}>
+          <Button variant="primary">Continuar</Button>
+        </div>
+      )}
       <div className={styles.actionContainer}>
         <Button variant="switch" onClick={handleReset}>
           {isRecruiter
-            ? "Rechazar y subir otra vacante"
+            ? "Volver a revisar la vacante"
             : "Volver a revisar el CV"}
         </Button>
       </div>

@@ -3,11 +3,12 @@ import { showToast } from "@/components/Toast";
 import {
   RECRUITER_MODE_KEY,
   RESUME_DATA_KEY,
+  SUGGESTIONS_KEY,
   VACANCY_DATA_KEY,
 } from "@/utils/constants-all";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { IResume } from "@/models/resume";
-import { useResumeStore } from "./useResumeStore";
+import { useResumeStore } from "./use-resumeStore";
 
 interface IResponse {
   success: boolean;
@@ -17,11 +18,13 @@ interface IResponse {
 
 interface ResumeData {
   resume: IResume;
+  suggestions?: string;
   error?: string;
 }
 
 interface VacancyData {
   vacancy: string;
+  suggestions?: string;
   error?: string;
 }
 
@@ -52,7 +55,7 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
       router.push("/curriculum-analisys");
     }
     if (getResumeData() && isRecruiter) {
-      router.push("/resources");
+      router.push("/vacancy");
     }
   }, [isRecruiter]);
 
@@ -67,12 +70,20 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
         VACANCY_DATA_KEY,
         JSON.stringify((data.data as VacancyData).vacancy)
       );
+      localStorage.setItem(
+        SUGGESTIONS_KEY,
+        JSON.stringify((data.data as VacancyData).suggestions)
+      );
     } else {
       showToast.success(data.message);
       setResumeData((data.data as ResumeData).resume);
       localStorage.setItem(
         RESUME_DATA_KEY,
         JSON.stringify((data.data as ResumeData).resume)
+      );
+      localStorage.setItem(
+        SUGGESTIONS_KEY,
+        JSON.stringify((data.data as ResumeData).suggestions)
       );
     }
   };

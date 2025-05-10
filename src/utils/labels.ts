@@ -67,6 +67,7 @@ export const curriculumAnalisysLabels = {
   professionalEducation: "Educación",
   professionalSkills: "Habilidades",
   professionalCertifications: "Certificaciones",
+  suggestions: "Sugerencias",
   analysisSuccess:
     "¡Bien!, hemos terminado de analizar y extraer tu información",
   analysisSuccessDescription:
@@ -77,6 +78,7 @@ export const stepperLabels = {
   step11: "Hoja de vida",
   step12: "Vacante",
   step13: "Documentos",
-  step21: "Vacante y hoja de vida",
-  step22: "Reporte",
+  step21: "Vacante",
+  step22: "Candidatos",
+  step23: "Reporte",
 };

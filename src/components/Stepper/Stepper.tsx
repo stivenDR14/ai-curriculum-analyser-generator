@@ -3,12 +3,12 @@
 import React, { useEffect, useMemo } from "react";
 import styles from "./Stepper.module.css";
 import { stepperLabels } from "@/utils/labels";
-import { useSettingsStore } from "@/hooks/useSettingsStore";
+import { useSettingsStore } from "@/hooks/use-settingsStore";
 import { usePathname } from "next/navigation";
 
 const getLabels = (isRecruiter: boolean) => {
   if (isRecruiter) {
-    return [stepperLabels.step21, stepperLabels.step22];
+    return [stepperLabels.step21, stepperLabels.step22, stepperLabels.step23];
   }
   return [stepperLabels.step11, stepperLabels.step12, stepperLabels.step13];
 };
@@ -24,12 +24,13 @@ const Stepper: React.FC = () => {
     return !isRecruiter
       ? {
           "/curriculum-analisys": 1,
-          "/resources": 2, // Asumiendo que esta es la página para el paso 2
-          "/reports": 3, // Asumiendo que esta es la página para el paso 3
+          "/resources": 2,
+          "/reports": 3,
         }
       : {
-          "/resources": 1, // Para reclutador, /resources es el paso 1
-          "/report": 2, // Y /report es el paso 2
+          "/vacancy": 1,
+          "/resources": 2,
+          "/report": 3,
         };
   }, [isRecruiter]);
 

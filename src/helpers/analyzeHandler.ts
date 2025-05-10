@@ -109,6 +109,7 @@ export async function handleAnalysis(
                 please provide the response in the following JSON format:
                 {
                   "vacancy": "string",
+                  "suggestions": "string",
                   "error": "string"
                 }
 
@@ -159,6 +160,7 @@ export async function handleAnalysis(
                     "education": "string",
                     "certifications": "string"
                   },
+                  "suggestions": "string",
                   "error": "string"
                 }
 
@@ -263,3 +265,119 @@ export async function handleAnalysis(
     );
   }
 }
+
+/* try {
+      // Buscar el contenido JSON entre los marcadores de código
+      const jsonMatch =
+        responseText.match(/```json\n([\s\S]*?)\n```/) ||
+        responseText.match(/```\n([\s\S]*?)\n```/) ||
+        responseText.match(/{[\s\S]*?}/);
+
+      let jsonString = jsonMatch?.[1] || jsonMatch?.[0];
+
+      if (jsonString) {
+        // Limpieza básica: eliminar caracteres problemáticos
+        jsonString = jsonString.replace(/[\u0000-\u0019]/g, ""); // Eliminar caracteres de control
+
+        // Intentar parsear el JSON limpio usando múltiples métodos
+        try {
+          // Método 1: Parseo directo
+          jsonResponse = JSON.parse(jsonString);
+        } catch (error) {
+          console.error("Standard JSON parse failed:", error);
+
+          try {
+            // Método 2: Extraer y construir el objeto manualmente
+            if (type === "vacancy") {
+              // Extraer todo el contenido entre comillas después de "vacancy": hasta la siguiente comilla
+              const vacancyMatch = responseText.match(
+                /"vacancy"\s*:\s*"([^]*?)"\s*,?\s*"error"/
+              );
+              if (vacancyMatch && vacancyMatch[1]) {
+                jsonResponse = {
+                  vacancy: vacancyMatch[1]
+                    .replace(/\\n/g, "\n")
+                    .replace(/\\"/g, '"'),
+                  error: "",
+                } as VacancyResponse;
+              } else {
+                // Fallback: crear un objeto con el texto completo
+                jsonResponse = {
+                  vacancy: responseText,
+                  error: "",
+                } as VacancyResponse;
+              }
+            } else {
+              // Para currículum, crear un objeto básico
+              const resumeResponse: ResumeResponse = {
+                resume: {
+                  title: "",
+                  contactInformation: "",
+                  professionalSummary: "",
+                  skills: "",
+                  workExperience: "",
+                  projects: "",
+                  education: "",
+                  certifications: "",
+                },
+                error: "",
+              };
+
+              jsonResponse = resumeResponse;
+
+              // Intentar extraer cada sección del texto
+              try {
+                const resumeText = responseText.substring(
+                  responseText.indexOf('"resume"'),
+                  responseText.lastIndexOf("}")
+                );
+
+                const sectionNames = [
+                  "title",
+                  "contactInformation",
+                  "professionalSummary",
+                  "skills",
+                  "workExperience",
+                  "projects",
+                  "education",
+                  "certifications",
+                ] as const;
+
+                sectionNames.forEach((section) => {
+                  const regex = new RegExp(
+                    `"${section}"\\s*:\\s*"([^]*?)(?:"\\s*,|"\\s*})`,
+                    "i"
+                  );
+                  const match = resumeText.match(regex);
+
+                  if (match && match[1] && isResumeResponse(jsonResponse)) {
+                    jsonResponse.resume[
+                      section as keyof typeof jsonResponse.resume
+                    ] = match[1].replace(/\\n/g, "\n").replace(/\\"/g, '"');
+                  }
+                });
+              } catch (extractError) {
+                console.error("Section extraction failed:", extractError);
+              }
+            }
+          } catch (fallbackError) {
+            console.error("All parsing methods failed:", fallbackError);
+            throw new Error(
+              "Failed to parse JSON response after multiple attempts"
+            );
+          }
+        }
+      } else {
+        throw new Error("No JSON found in response");
+      }
+    } catch (error) {
+      console.error("Error parsing JSON response:", error);
+      return NextResponse.json(
+        {
+          success: false,
+          message: backendErrorsLabels.errorProcessingCurriculum,
+          error: "Invalid JSON response from model",
+        },
+        { status: 500 }
+      );
+    } */
