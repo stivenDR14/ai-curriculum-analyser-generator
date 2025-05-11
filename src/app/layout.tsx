@@ -16,8 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Curriculum Analyzer",
-  description: "Analiza tu CV y vacantes con IA",
+  title: "Mejora tu CV con IA",
+  description:
+    "Analiza y mejora tu CV o perfila candidatos ideales para tus vacantes utilizando inteligencia artificial",
+  icons: {
+    icon: "/main-icon.ico",
+    apple: "/main-icon.webp",
+  },
 };
 
 export default function RootLayout({
