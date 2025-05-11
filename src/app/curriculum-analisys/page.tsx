@@ -9,6 +9,7 @@ import { curriculumAnalisysLabels } from "@/utils/labels";
 import { useRouter } from "next/navigation";
 import CardSection from "@/components/CardSection/CardSection";
 import { useResumeStore } from "@/hooks/use-resumeStore";
+import { useEditContent } from "@/hooks/use-edit-content.hook";
 
 export default function CurriculumAnalisys() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function CurriculumAnalisys() {
   const loadSuggestionsFromStorage = useResumeStore(
     (state) => state.loadSuggestionsFromStorage
   );
+  const { clearEditedContent } = useEditContent();
 
   useEffect(() => {
     if (!resumeData) {
@@ -43,6 +45,7 @@ export default function CurriculumAnalisys() {
     router.push("/");
     clearResumeData();
     clearSuggestions();
+    clearEditedContent();
   };
 
   if (!resumeData) {
@@ -72,56 +75,56 @@ export default function CurriculumAnalisys() {
           title={curriculumAnalisysLabels.professionalTitle}
           content={resumeData.title}
           icon="📝"
-          showGeneratePDF={false}
+          id="title"
         />
 
         <CardSection
           title={curriculumAnalisysLabels.contactInformation}
           content={resumeData.contactInformation}
           icon="📞"
-          showGeneratePDF={false}
+          id="contactInformation"
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalSummary}
           content={resumeData.professionalSummary}
           icon="📑"
-          showGeneratePDF={false}
+          id="professionalSummary"
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalExperience}
           content={resumeData.workExperience}
           icon="💼"
-          showGeneratePDF={false}
+          id="workExperience"
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalProjects}
           content={resumeData.projects}
           icon="🖇️"
-          showGeneratePDF={false}
+          id="projects"
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalEducation}
           content={resumeData.education}
           icon="🎓"
-          showGeneratePDF={false}
+          id="education"
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalSkills}
           content={resumeData.skills}
           icon="💪"
-          showGeneratePDF={false}
+          id="skills"
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalCertifications}
           content={resumeData.certifications}
           icon="🏆"
-          showGeneratePDF={false}
+          id="certifications"
         />
 
         <div className={styles.actionContainer}>

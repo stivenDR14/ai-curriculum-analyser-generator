@@ -120,6 +120,6 @@ export const reportLabels = {
   curriculum: "Curriculum",
   downloadDocuments: "Descargar",
   downloadPDF: "Descargar PDF",
-  backToResources: "Volver",
+  backToResources: "Volver y borrar este reporte",
   compatibilityReportTitle: "Reporte de compatibilidad",
 };

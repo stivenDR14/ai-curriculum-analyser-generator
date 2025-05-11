@@ -4,7 +4,8 @@ import React, { useEffect, useMemo } from "react";
 import styles from "./Stepper.module.css";
 import { stepperLabels } from "@/utils/labels";
 import { useSettingsStore } from "@/hooks/use-settingsStore";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useResumeStore } from "@/hooks/use-resumeStore";
 
 const getLabels = (isRecruiter: boolean) => {
   if (isRecruiter) {
@@ -19,7 +20,7 @@ const Stepper: React.FC = () => {
   const loadRecruiterFromStorage = useSettingsStore(
     (state) => state.loadIsRecruiterFromStorage
   );
-
+  const router = useRouter();
   const routesMap = useMemo(() => {
     return !isRecruiter
       ? {
@@ -50,6 +51,20 @@ const Stepper: React.FC = () => {
     return null;
   }
 
+  const handleClick = (step: number) => {
+    switch (step) {
+      case 1:
+        router.push("/");
+        break;
+      case 2:
+        router.push("/resources");
+        break;
+      case 3:
+        if (useResumeStore.getState().documents) router.push("/report");
+        break;
+    }
+  };
+
   return (
     <nav className={styles.stepper} aria-label="Progreso del proceso">
       {labels.map((label, idx) => {
@@ -59,7 +74,10 @@ const Stepper: React.FC = () => {
 
         return (
           <React.Fragment key={label}>
-            <div className={styles.stepItem}>
+            <div
+              className={styles.stepItem}
+              onClick={() => handleClick(stepNumber)}
+            >
               <div
                 className={`${styles.circle} ${
                   isActive

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
 import { vacancyLabels } from "@/utils/labels";
+import { useEditContent } from "@/hooks/use-edit-content.hook";
 export default function Vacancy() {
   const vacancyData = useResumeStore((state) => state.vacancyData);
   const loadVacancyFromStorage = useResumeStore(
@@ -20,6 +21,7 @@ export default function Vacancy() {
   const loadSuggestionsFromStorage = useResumeStore(
     (state) => state.loadSuggestionsFromStorage
   );
+  const { clearEditedContent } = useEditContent();
   const router = useRouter();
 
   useEffect(() => {
@@ -42,6 +44,7 @@ export default function Vacancy() {
     router.push("/");
     clearVacancyData();
     clearSuggestions();
+    clearEditedContent();
   };
 
   const handleContinue = () => {
@@ -70,6 +73,7 @@ export default function Vacancy() {
           title={vacancyLabels.vacancyTitle}
           content={vacancyData}
           icon="📝"
+          id="vacancy"
         />
       </div>
 

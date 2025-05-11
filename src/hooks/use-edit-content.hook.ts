@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import { DOCUMENTS_KEY } from "@/utils/constants-all";
+import {
+  DOCUMENTS_KEY,
+  RESUME_DATA_KEY,
+  VACANCY_DATA_KEY,
+} from "@/utils/constants-all";
 import { useResumeStore } from "./use-resumeStore";
 
 // Clave para almacenar el contenido editado en localStorage
@@ -60,25 +64,17 @@ export const useEditContentStore = create<EditContentStoreState>(
 
       // Obtener el estado global de documentos
       const documentsFromStore = useResumeStore.getState().documents;
-
+      const resumeDataFromStore = useResumeStore.getState().resumeData;
+      const vacancyDataFromStore = useResumeStore.getState().vacancyData;
       // Si hay documentos en el store global, actualizar según corresponda
       if (documentsFromStore) {
         const updatedDocuments = { ...documentsFromStore };
 
-        // Actualizar el documento correspondiente según el ID
-        if (id === "report" && updatedDocuments.report !== undefined) {
-          updatedDocuments.report = newContent;
-        } else if (
-          id === "coverLetter" &&
-          updatedDocuments.coverLetter !== undefined
-        ) {
-          updatedDocuments.coverLetter = newContent;
-        } else if (
-          id === "curriculum" &&
-          updatedDocuments.report !== undefined
-        ) {
-          // No modificamos directamente el currículum porque está compuesto de varios campos
-          // Esto se manejaría en otro lugar si fuera necesario
+        // Actualizar el documento correspondiente según el ID de manera más genérica
+        const documentKeys = ["report", "coverLetter"];
+
+        if (documentKeys.includes(id) && id in updatedDocuments) {
+          updatedDocuments[id as keyof typeof updatedDocuments] = newContent;
         }
 
         // Actualizar el estado global con los documentos modificados
@@ -86,6 +82,55 @@ export const useEditContentStore = create<EditContentStoreState>(
 
         // También actualizar localStorage para mantener consistencia
         localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(updatedDocuments));
+      }
+
+      if (resumeDataFromStore) {
+        const updatedResumeData = { ...resumeDataFromStore };
+
+        const curriculumKeys = [
+          "title",
+          "contactInformation",
+          "professionalSummary",
+          "workExperience",
+          "projects",
+          "education",
+          "skills",
+          "certifications",
+        ];
+
+        if (curriculumKeys.includes(id) && id in updatedResumeData) {
+          updatedResumeData[id as keyof typeof updatedResumeData] = newContent;
+        }
+
+        // Actualizar el estado global con los documentos modificados
+        useResumeStore.getState().setResumeData(updatedResumeData);
+
+        localStorage.setItem(
+          RESUME_DATA_KEY,
+          JSON.stringify(updatedResumeData)
+        );
+      }
+
+      console.log("vacancyDataFromStore", vacancyDataFromStore);
+
+      if (vacancyDataFromStore) {
+        let updatedVacancyData = vacancyDataFromStore;
+
+        const vacancyKeys = ["vacancy"];
+
+        if (vacancyKeys.includes(id) && updatedVacancyData) {
+          updatedVacancyData = newContent;
+        }
+
+        console.log("updatedVacancyData", updatedVacancyData);
+
+        // Actualizar el estado global con los documentos modificados
+        useResumeStore.getState().setVacancyData(updatedVacancyData);
+
+        localStorage.setItem(
+          VACANCY_DATA_KEY,
+          JSON.stringify(updatedVacancyData)
+        );
       }
 
       // Limpiar estado de edición
