@@ -8,8 +8,12 @@ export const useReportDocuments = () => {
   const isRecruiter = useSettingsStore((state) => state.isRecruiter);
   const documents = useResumeStore((state) => state.documents);
   const clearDocuments = useResumeStore((state) => state.clearDocuments);
+  const resumeData = useResumeStore((state) => state.resumeData);
   const loadDocumentsFromStorage = useResumeStore(
     (state) => state.loadDocumentsFromStorage
+  );
+  const loadResumeFromStorage = useResumeStore(
+    (state) => state.loadResumeFromStorage
   );
   const loadRecruiterFromStorage = useSettingsStore(
     (state) => state.loadIsRecruiterFromStorage
@@ -17,11 +21,13 @@ export const useReportDocuments = () => {
   useEffect(() => {
     loadDocumentsFromStorage();
     loadRecruiterFromStorage();
+    loadResumeFromStorage();
   }, []);
 
   return {
     router,
     documents,
+    resumeData,
     isRecruiter,
     clearDocuments,
   };

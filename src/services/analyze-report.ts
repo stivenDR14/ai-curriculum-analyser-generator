@@ -116,7 +116,6 @@ export async function handleReport(
                     "percentage": "string",
                     "summary": "string",
                   },
-                  "suggestions": "string",
                   "error": "string"
                 }
 
@@ -168,7 +167,6 @@ export async function handleReport(
                     "coverLetter": "string",
                     "summary": "string"
                   },
-                  "suggestions": "string",
                   "error": "string"
                 }
 
@@ -195,7 +193,7 @@ export async function handleReport(
         },
       ],
       inferenceConfig: {
-        temperature: 0.4,
+        temperature: 0.7,
         topP: 0.9,
         maxTokens: 3000,
       },
@@ -207,7 +205,9 @@ export async function handleReport(
     console.log(
       "Response:",
       response,
-      response.output?.message?.content?.map((block) => block.text)
+      response.output?.message?.content?.length,
+      response.output?.message?.content?.[0]?.text,
+      response.output?.message?.content?.[1]?.text
     );
 
     // Extraer el texto de la respuesta
@@ -216,35 +216,25 @@ export async function handleReport(
     // Intentar extraer el JSON de la respuesta
     let jsonResponse;
     try {
-      // Buscar el contenido JSON entre los marcadores de código
-      const jsonMatch =
-        responseText.match(/```json\n([\s\S]*?)\n```/) ||
-        responseText.match(/```\n([\s\S]*?)\n```/) ||
-        responseText.match(/{[\s\S]*?}/);
-      const jsonMatchAux = (jsonMatch?.[1] || jsonMatch?.[0])
-        ?.replace(/[\[\]]/g, "_")
-        // Escapa los saltos de línea dentro de los valores de string
-        .replace(/:\s*"(.*?)"/g, (match, p1) => {
-          // Escapa los saltos de línea y comillas dentro del valor
-          const escaped = p1.replace(/\n/g, "\\n").replace(/"/g, '\\"');
-          return `: "${escaped}"`;
-        });
-      console.log("jsonMatchAux", jsonMatchAux);
-      if (jsonMatchAux) {
-        jsonResponse = JSON.parse(jsonMatchAux);
-      } else {
-        throw new Error("No JSON found in response");
-      }
+      jsonResponse = JSON.parse(responseText);
     } catch (error) {
-      console.error("Error parsing JSON response:", error);
-      return NextResponse.json(
-        {
-          success: false,
-          message: backendErrorsLabels.errorProcessingCurriculum,
-          error: "Invalid JSON response from model",
-        },
-        { status: 500 }
-      );
+      console.error("First error parsing JSON response:", error);
+      try {
+        //lets try to parse the formmat that could be ````json\n{...}\n`````
+        jsonResponse = JSON.parse(
+          responseText.replace(/```json\n/, "").replace(/\n```/, "")
+        );
+      } catch (error) {
+        console.error("Second error parsing JSON response:", error);
+        return NextResponse.json(
+          {
+            success: false,
+            message: backendErrorsLabels.errorProcessingCurriculum,
+            error: "Invalid JSON response from model",
+          },
+          { status: 500 }
+        );
+      }
     }
 
     return NextResponse.json({

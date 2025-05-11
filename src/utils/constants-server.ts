@@ -26,7 +26,6 @@ You must generate and return a JSON object with the following exact format:
     "summary": "string",
     "coverLetter": "string (only if user requires to generate the cover letter)"
   },
-  "suggestions": "string",
   "error": "string"
 }
 
@@ -77,6 +76,8 @@ Use the following Markdown structure for the report:
 - ...
 - ...
 
+The whole report content, titles and each section must be in ${language}.
+
 ---
 
 ### 2. "documents.percentage" (stringified integer)
@@ -90,7 +91,6 @@ Base this score on:
 - Certainty level from available input data (10%)
 
 Use a weighted estimate based on the provided materials. Example: "82"
-
 ---
 
 ### 3. "documents.coverLetter" (Markdown formatted string) (only if user requires to generate the cover letter)
@@ -106,7 +106,7 @@ Include:
 
 Use this structure:
 
-Dear _Hiring Manager/Recruiter Name or "Hiring Team"_,
+### Dear _Hiring Manager/Recruiter Name or "Hiring Team"_,
 
 I am writing to express my strong interest in the _Job Title_ position at _Company Name_. With my background in _industry/field_ and my passion for _relevant area or mission of the company_, I am confident that I would make a valuable addition to your team.
 
@@ -117,9 +117,10 @@ What excites me most about _Company Name_ is _mention cultural value, mission, o
 Thank you for considering my application. I look forward to the possibility of discussing how I can contribute to your team.
 
 Sincerely,  
-_Candidate Name_
+ - _Candidate Name - Professional Title_
 
 Replace all the explanations with underscores with actual values inferred from the input.
+the cover letter content and title must be in ${language}.
 ---
 
 ### 4. "documents.summary" (string)
@@ -127,22 +128,11 @@ Replace all the explanations with underscores with actual values inferred from t
 Depending on the user's request, if the user requires to generate the cover letter, the summary will be a summary of the vacancy based on the resources provided for that.
 If the user does not require to generate the cover letter, the summary will be a summary of the candidate based on the resources provided for that.
 - The summary must be provided into a paragraph of 5-6 sentences.
+- The summary content must be in ${language}.
 
 ---
 
-### 5. "suggestions" (string)
-
-If relevant, write **constructive suggestions** for improving the candidate's presentation or strategy. Examples:
-
-- "Consider adding more metrics to quantify achievements."
-- "Clarify the reason for the gap between 2020 and 2022."
-- "Tailor your LinkedIn profile headline to match your target role."
-
-If no suggestions are needed, return an empty string.
-
----
-
-### 6. "error" (string)
+### 5. "error" (string)
 
 If required input fields are missing (e.g., no job description, no candidate data), write a brief explanation here. Otherwise, return an empty string.
 
