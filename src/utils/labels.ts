@@ -72,6 +72,7 @@ export const curriculumAnalisysLabels = {
     "¡Bien!, hemos terminado de analizar y extraer tu información",
   analysisSuccessDescription:
     "Hemos logrado un 95% de precisión en la extracción. Hemos generado las siguientes secciones",
+  downloadPDF: "Descargar PDF",
 };
 
 export const vacancyLabels = {

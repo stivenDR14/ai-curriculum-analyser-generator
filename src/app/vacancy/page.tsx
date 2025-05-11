@@ -29,6 +29,10 @@ export default function Vacancy() {
   }, []);
 
   useEffect(() => {
+    console.log("vacancyData", vacancyData);
+  }, [vacancyData]);
+
+  useEffect(() => {
     if (!suggestions) {
       loadSuggestionsFromStorage();
     }
@@ -61,13 +65,11 @@ export default function Vacancy() {
           title={vacancyLabels.suggestionTitle}
           content={suggestions}
           icon="💡"
-          handleEdit={() => {}}
         />
         <CardSection
           title={vacancyLabels.vacancyTitle}
           content={vacancyData}
           icon="📝"
-          handleEdit={() => {}}
         />
       </div>
 

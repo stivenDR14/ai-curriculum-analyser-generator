@@ -67,63 +67,63 @@ export default function CurriculumAnalisys() {
           content={suggestions}
           isSuggestion
           icon="💡"
-          handleEdit={() => {}}
         />
         <CardSection
           title={curriculumAnalisysLabels.professionalTitle}
           content={resumeData.title}
           icon="📝"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
 
         <CardSection
           title={curriculumAnalisysLabels.contactInformation}
           content={resumeData.contactInformation}
           icon="📞"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalSummary}
           content={resumeData.professionalSummary}
           icon="📑"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalExperience}
           content={resumeData.workExperience}
           icon="💼"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalProjects}
           content={resumeData.projects}
           icon="🖇️"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalEducation}
           content={resumeData.education}
           icon="🎓"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalSkills}
           content={resumeData.skills}
           icon="💪"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
 
         <CardSection
           title={curriculumAnalisysLabels.professionalCertifications}
           content={resumeData.certifications}
           icon="🏆"
-          handleEdit={() => {}}
+          showGeneratePDF={false}
         />
+
         <div className={styles.actionContainer}>
           <Button onClick={handleContinue} variant="primary">
             {curriculumAnalisysLabels.continueButtonText}

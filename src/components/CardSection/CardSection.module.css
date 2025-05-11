@@ -242,7 +242,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 9999;
+  z-index: 4;
 }
 
 .pdfModalContent {
@@ -368,4 +368,15 @@
   text-align: center;
   width: 100%;
   margin: 20px 0;
+}
+
+.editorContainer {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  max-width: 210mm; /* Ancho A4 */
+  min-height: 297mm; /* Alto A4 */
+  overflow: hidden;
+  padding: 20px;
 }

@@ -32,7 +32,7 @@ export default function Report() {
   }
 
   return (
-    <main style={{ maxWidth: 800, margin: "0 auto", padding: "2rem" }}>
+    <main className={styles.mainContent}>
       <Title centered>
         {level}
         {reportLabels.youHaveReport}

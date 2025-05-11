@@ -21,12 +21,14 @@ export default function CardSection({
   icon,
   isSuggestion = false,
   id = "",
+  showGeneratePDF = true,
 }: {
   title: string;
   content: string;
   icon: string;
   isSuggestion?: boolean;
   id?: string;
+  showGeneratePDF?: boolean;
 }) {
   const [expanded, setExpanded] = useState(isSuggestion ? true : false);
   const [showPdfModal, setShowPdfModal] = useState(false);
@@ -162,7 +164,7 @@ export default function CardSection({
               </button>
             )}
         </div>
-        {!isSuggestion && (
+        {!isSuggestion && showGeneratePDF && (
           <div className={styles.actionButtons}>
             <button className={styles.actionButton} onClick={handleEditContent}>
               Editar
