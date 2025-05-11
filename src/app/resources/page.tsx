@@ -39,16 +39,18 @@ export default function Resources() {
 
   if (isLoading) {
     return (
-      <Loader
-        messages={[
-          loaderMessages.sendingResources,
-          loaderMessages.extractingInformation,
-          loaderMessages.abstractingInformation,
-          loaderMessages.somethingGreat,
-          loaderMessages.moreTime,
-        ]}
-        interval={isRecruiter ? 3000 : 5000}
-      />
+      <main className={styles.container}>
+        <Loader
+          messages={[
+            loaderMessages.sendingResources,
+            loaderMessages.extractingInformation,
+            loaderMessages.abstractingInformation,
+            loaderMessages.somethingGreat,
+            loaderMessages.moreTime,
+          ]}
+          interval={isRecruiter ? 3000 : 5000}
+        />
+      </main>
     );
   }
   return (
