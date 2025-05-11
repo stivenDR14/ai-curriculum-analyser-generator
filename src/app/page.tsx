@@ -5,21 +5,31 @@ import styles from "./page.module.css";
 import {
   landingPageCurriculumLabels,
   landingPageHiringLabels,
+  loaderMessages,
 } from "@/utils/labels";
 import Loader from "@/components/Loader";
-import Button from "@/components/Button";
-import { Title, Subtitle } from "@/components/Typography";
-import UploadArea, {
-  UploadText,
-  SelectText,
-  UploadInfo,
-} from "@/components/UploadArea";
-
+import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
+import VacancyUploadExtractor from "@/components/Extractor/VacancyUploadExtractor";
+import { useSettingsStore } from "@/hooks/use-settingsStore";
+import { MAX_CHARACTERS } from "@/utils/constants-all";
+import { UseHandleUploadFiles } from "@/hooks/use-handle-upload-files.hook";
 export default function Home() {
-  const [isRecruiter, setIsRecruiter] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showRecruiter, setShowRecruiter] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const setSettingData = useSettingsStore((state) => state.setIsRecruiter);
+  const {
+    isRecruiter,
+    setIsRecruiter,
+    uploadedFiles,
+    disableSelectFile,
+    setUploadedFiles,
+    recruiterText,
+    cvText,
+    isLoading,
+    handleAnalyze,
+    handleTextChange,
+    handleSelectFile,
+  } = UseHandleUploadFiles(true);
 
   useEffect(() => {
     if (!isAnimating) {
@@ -32,18 +42,13 @@ export default function Home() {
 
     setTimeout(() => {
       setIsRecruiter(!isRecruiter);
-
+      setSettingData(!isRecruiter);
       setTimeout(() => {
         setIsAnimating(false);
       }, 100);
     }, 800);
   };
 
-  const handleAnalyze = () => {
-    setIsLoading(true);
-  };
-
-  // Clases para ambas vistas
   const recruiterClasses = `${styles.landingPage} ${
     !isAnimating && showRecruiter
       ? styles.landingPageEnter
@@ -58,56 +63,63 @@ export default function Home() {
   if (isLoading) {
     return (
       <Loader
-        destination={isRecruiter ? "/resources" : "/curriculum-analisys"}
+        messages={[
+          loaderMessages.sendingResources,
+          loaderMessages.extractingInformation,
+          isRecruiter
+            ? loaderMessages.abstractingInformation
+            : loaderMessages.generatingSections,
+          loaderMessages.somethingGreat,
+          loaderMessages.moreTime,
+        ]}
+        interval={isRecruiter ? 3000 : 5000}
       />
     );
   }
 
   return (
     <main className={styles.mainContent}>
-      {/* Vista de reclutador - siempre presente pero controlada por CSS */}
       <div className={recruiterClasses}>
-        <Title>{landingPageHiringLabels.title}</Title>
-        <Subtitle>{landingPageHiringLabels.subtitle}</Subtitle>
-
-        <UploadArea>
-          <textarea
-            className={styles.vacancyTextarea}
-            placeholder={landingPageHiringLabels.placeholderText}
-          ></textarea>
-          <UploadInfo>{landingPageHiringLabels.uploadPdfText}</UploadInfo>
-        </UploadArea>
-
-        <Button onClick={handleAnalyze} variant="primary">
-          {landingPageHiringLabels.analyzeButtonText}
-        </Button>
-
-        <Button onClick={toggleView} variant="switch">
-          {landingPageHiringLabels.switchText}
-        </Button>
+        <VacancyUploadExtractor
+          title={landingPageHiringLabels.title}
+          subtitle={landingPageHiringLabels.subtitle}
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+          recruiterText={recruiterText}
+          onRecruiterTextChange={(e) => handleTextChange(e, true)}
+          maxCharacters={MAX_CHARACTERS}
+          handleAnalyze={() => handleAnalyze("vacancy")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
+          dragText={landingPageCurriculumLabels.dragText}
+          selectText={landingPageCurriculumLabels.selectText}
+          selectFromText={landingPageCurriculumLabels.selectFromText}
+          placeholderText={landingPageHiringLabels.placeholderText}
+          analyzeButtonText={landingPageHiringLabels.analyzeButtonText}
+          switchText={landingPageHiringLabels.switchText}
+          onSwitch={toggleView}
+        />
       </div>
-
-      {/* Vista de candidato - siempre presente pero controlada por CSS */}
       <div className={cvClasses}>
-        <Title>{landingPageCurriculumLabels.title}</Title>
-        <Subtitle>{landingPageCurriculumLabels.subtitle}</Subtitle>
-
-        <UploadArea>
-          <UploadText>
-            {landingPageCurriculumLabels.dragText}
-            <SelectText>{landingPageCurriculumLabels.selectText}</SelectText>
-            {landingPageCurriculumLabels.selectFromText}
-          </UploadText>
-          <UploadInfo>{landingPageCurriculumLabels.uploadInfo}</UploadInfo>
-        </UploadArea>
-
-        <Button onClick={handleAnalyze} variant="primary">
-          {landingPageCurriculumLabels.analyzeButtonText}
-        </Button>
-
-        <Button onClick={toggleView} variant="switch">
-          {landingPageCurriculumLabels.switchText}
-        </Button>
+        <CurriculumUploadExtractor
+          title={landingPageCurriculumLabels.title}
+          subtitle={landingPageCurriculumLabels.subtitle}
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+          cvText={cvText}
+          onCvTextChange={(e) => handleTextChange(e, false)}
+          maxCharacters={MAX_CHARACTERS}
+          handleAnalyze={() => handleAnalyze("curriculum")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
+          dragText={landingPageCurriculumLabels.dragText}
+          selectText={landingPageCurriculumLabels.selectText}
+          selectFromText={landingPageCurriculumLabels.selectFromText}
+          uploadInfo={landingPageCurriculumLabels.uploadInfo}
+          analyzeButtonText={landingPageCurriculumLabels.analyzeButtonText}
+          switchText={landingPageCurriculumLabels.switchText}
+          onSwitch={toggleView}
+        />
       </div>
     </main>
   );

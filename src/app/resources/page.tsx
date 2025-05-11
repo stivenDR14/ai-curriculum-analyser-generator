@@ -1,62 +1,108 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import styles from "./page.module.css";
 import Button from "@/components/Button";
-import { Title, Description } from "@/components/Typography";
+import VacancyUploadExtractor from "@/components/Extractor/VacancyUploadExtractor";
+import { MAX_CHARACTERS } from "@/utils/constants-all";
+import {
+  landingPageCurriculumLabels,
+  landingPageHiringLabels,
+  loaderMessages,
+  resourcesLabels,
+} from "@/utils/labels";
+import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
+import { UseHandleUploadFiles } from "@/hooks/use-handle-upload-files.hook";
+import Loader from "@/components/Loader";
 
 export default function Resources() {
-  const [jobDescription, setJobDescription] = useState("");
+  const {
+    router,
+    isRecruiter,
+    uploadedFiles,
+    disableSelectFile,
+    setUploadedFiles,
+    recruiterText,
+    cvText,
+    isLoading,
+    handleAnalyze,
+    handleTextChange,
+    handleSelectFile,
+  } = UseHandleUploadFiles(false);
 
-  const handleJobDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setJobDescription(e.target.value);
+  const handleReset = () => {
+    if (isRecruiter) {
+      router.push("/vacancy");
+    } else {
+      router.push("/curriculum-analisys");
+    }
   };
 
-  const handleAnalyzeJob = () => {
-    // En una implementación real, aquí procesaríamos la información
-    alert("Analizando vacante...");
-  };
-
+  if (isLoading) {
+    return (
+      <main className={styles.container}>
+        <Loader
+          messages={[
+            loaderMessages.sendingResources,
+            loaderMessages.extractingInformation,
+            loaderMessages.abstractingInformation,
+            loaderMessages.somethingGreat,
+            loaderMessages.moreTime,
+          ]}
+          interval={isRecruiter ? 3000 : 5000}
+        />
+      </main>
+    );
+  }
   return (
     <main className={styles.container}>
-      <Title centered>{`¿A qué te quieres postular?`}</Title>
-
-      <Description centered>
-        En el campo a continuación agrega la URL donde está el vacante, o pega
-        el texto de la página que la contiene.
-      </Description>
-
-      <div className={styles.inputContainer}>
-        <textarea
-          className={styles.jobTextArea}
-          value={jobDescription}
-          onChange={handleJobDescriptionChange}
-          placeholder="Ej: We are Foolproof, a product design specialist working closely with Indigo Slate..."
+      {!isRecruiter ? (
+        <VacancyUploadExtractor
+          title={resourcesLabels.titleCandidate}
+          subtitle={resourcesLabels.subtitleCandidate}
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+          recruiterText={recruiterText}
+          onRecruiterTextChange={(e) => handleTextChange(e, true)}
+          maxCharacters={MAX_CHARACTERS}
+          handleAnalyze={() => handleAnalyze("vacancy")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
+          dragText={landingPageCurriculumLabels.dragText}
+          selectText={landingPageCurriculumLabels.selectText}
+          selectFromText={landingPageCurriculumLabels.selectFromText}
+          placeholderText={landingPageHiringLabels.placeholderText}
+          analyzeButtonText={resourcesLabels.continueButtonTextCandidate}
+          switchText={""}
+          onSwitch={() => {}}
         />
+      ) : (
+        <CurriculumUploadExtractor
+          title={resourcesLabels.titleRecruiter}
+          subtitle={resourcesLabels.subtitleRecruiter}
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+          cvText={cvText}
+          onCvTextChange={(e) => handleTextChange(e, false)}
+          maxCharacters={MAX_CHARACTERS}
+          handleAnalyze={() => handleAnalyze("curriculum")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
+          dragText={landingPageCurriculumLabels.dragText}
+          selectText={landingPageCurriculumLabels.selectText}
+          selectFromText={landingPageCurriculumLabels.selectFromText}
+          uploadInfo={landingPageCurriculumLabels.uploadInfo}
+          analyzeButtonText={resourcesLabels.continueButtonTextRecruiter}
+          switchText={""}
+          onSwitch={() => {}}
+        />
+      )}
 
-        <div className={styles.fileUploadContainer}>
-          <button className={styles.fileUploadButton}>
-            O selecciona un PDF desde tus archivos
-          </button>
-        </div>
-
-        <div className={styles.actionContainer}>
-          <Button onClick={handleAnalyzeJob} variant="primary">
-            Analizar Vacante
-          </Button>
-        </div>
-      </div>
-
-      <div className={styles.navigationContainer}>
-        <Link href="/curriculum-analisys" className={styles.backButton}>
-          Volver al Currículum
-        </Link>
-        <Link href="/" className={styles.homeButton}>
-          Volver al Inicio
-        </Link>
+      <div className={styles.actionContainer}>
+        <Button variant="switch" onClick={handleReset}>
+          {isRecruiter
+            ? resourcesLabels.rejectAndUploadOtherRecruiter
+            : resourcesLabels.rejectAndUploadOtherCandidate}
+        </Button>
       </div>
     </main>
   );
