@@ -7,3 +7,4 @@ export const RECRUITER_MODE_KEY = "isRecruiterMode";
 export const RESUME_DATA_KEY = "resumeData";
 export const VACANCY_DATA_KEY = "vacancyData";
 export const SUGGESTIONS_KEY = "suggestions";
+export const DOCUMENTS_KEY = "documents";

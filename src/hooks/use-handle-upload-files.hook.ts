@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { frontendErrorsLabels } from "@/utils/labels";
 import { showToast } from "@/components/Toast";
 import { MAX_CHARACTERS, MAX_FILES } from "@/utils/constants-all";
+import { useResumeStore } from "./use-resumeStore";
 
 export const UseHandleUploadFiles = (isHome: boolean) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,11 +13,19 @@ export const UseHandleUploadFiles = (isHome: boolean) => {
   const [recruiterText, setRecruiterText] = useState("");
   const [cvText, setCvText] = useState("");
   const router = useRouter();
-
+  const loadResumeFromStorage = useResumeStore(
+    (state) => state.loadResumeFromStorage
+  );
+  const loadVacancyFromStorage = useResumeStore(
+    (state) => state.loadVacancyFromStorage
+  );
   const { isRecruiter, setIsRecruiter, saveResumeData } = useDocuments({
     router,
     isHome,
   });
+
+  const vacancyData = useResumeStore((state) => state.vacancyData);
+  const resumeData = useResumeStore((state) => state.resumeData);
 
   useEffect(() => {
     if (uploadedFiles.length < MAX_FILES) {
@@ -25,6 +34,13 @@ export const UseHandleUploadFiles = (isHome: boolean) => {
       setDisableSelectFile(true);
     }
   }, [uploadedFiles]);
+
+  useEffect(() => {
+    if (!isHome) {
+      loadResumeFromStorage();
+      loadVacancyFromStorage();
+    }
+  }, []);
 
   const handleAnalyze = async (type: "curriculum" | "vacancy") => {
     if (
@@ -41,13 +57,22 @@ export const UseHandleUploadFiles = (isHome: boolean) => {
       formData.append("files", file);
     });
     formData.append("text", type === "curriculum" ? cvText : recruiterText);
-
+    if (!isHome) {
+      if (type === "curriculum") {
+        formData.append("vacancy", vacancyData);
+      } else {
+        formData.append("resume", JSON.stringify(resumeData));
+      }
+    }
     try {
       console.log("type", type);
-      const response = await fetch(`/api/analyze/${type}`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `/api/${!isHome ? "report" : "analyze"}/${type}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(frontendErrorsLabels.uploadError);

@@ -43,9 +43,7 @@ export default function Resources() {
         messages={[
           loaderMessages.sendingResources,
           loaderMessages.extractingInformation,
-          isRecruiter
-            ? loaderMessages.abstractingInformation
-            : loaderMessages.generatingSections,
+          loaderMessages.abstractingInformation,
           loaderMessages.somethingGreat,
           loaderMessages.moreTime,
         ]}

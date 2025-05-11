@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import { showToast } from "@/components/Toast";
 import {
+  DOCUMENTS_KEY,
   RECRUITER_MODE_KEY,
   RESUME_DATA_KEY,
   SUGGESTIONS_KEY,
   VACANCY_DATA_KEY,
 } from "@/utils/constants-all";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { IResume } from "@/models/resume";
+import { IDocuments, IResume } from "@/models/general";
 import { useResumeStore } from "./use-resumeStore";
 
 interface IResponse {
   success: boolean;
   message: string;
-  data: ResumeData | VacancyData;
+  data: ResumeData | VacancyData | DocumentsData;
 }
 
 interface ResumeData {
@@ -25,6 +26,11 @@ interface ResumeData {
 interface VacancyData {
   vacancy: string;
   suggestions?: string;
+  error?: string;
+}
+
+interface DocumentsData {
+  documents: IDocuments;
   error?: string;
 }
 
@@ -72,27 +78,34 @@ export const useDocuments = ({
       showToast.info(data.data.error);
     }
 
-    if (isRecruiter) {
-      showToast.success(data.message);
+    if (!isHome) {
       localStorage.setItem(
-        VACANCY_DATA_KEY,
-        JSON.stringify((data.data as VacancyData).vacancy)
-      );
-      localStorage.setItem(
-        SUGGESTIONS_KEY,
-        JSON.stringify((data.data as VacancyData).suggestions)
+        DOCUMENTS_KEY,
+        JSON.stringify((data.data as DocumentsData).documents)
       );
     } else {
-      showToast.success(data.message);
-      setResumeData((data.data as ResumeData).resume);
-      localStorage.setItem(
-        RESUME_DATA_KEY,
-        JSON.stringify((data.data as ResumeData).resume)
-      );
-      localStorage.setItem(
-        SUGGESTIONS_KEY,
-        JSON.stringify((data.data as ResumeData).suggestions)
-      );
+      if (isRecruiter) {
+        showToast.success(data.message);
+        localStorage.setItem(
+          VACANCY_DATA_KEY,
+          JSON.stringify((data.data as VacancyData).vacancy)
+        );
+        localStorage.setItem(
+          SUGGESTIONS_KEY,
+          JSON.stringify((data.data as VacancyData).suggestions)
+        );
+      } else {
+        showToast.success(data.message);
+        setResumeData((data.data as ResumeData).resume);
+        localStorage.setItem(
+          RESUME_DATA_KEY,
+          JSON.stringify((data.data as ResumeData).resume)
+        );
+        localStorage.setItem(
+          SUGGESTIONS_KEY,
+          JSON.stringify((data.data as ResumeData).suggestions)
+        );
+      }
     }
   };
 

@@ -106,3 +106,16 @@ export const stepperLabels = {
   step22: "Candidatos",
   step23: "Reporte",
 };
+
+export const reportLabels = {
+  goodReport: "¡Bien 🔝!",
+  regularReport: "Hay aspectos que mejorar 🤔",
+  badReport: "Vaya 🚨",
+  youHaveReport: ",Existe un ",
+  compatibilityReport: " de compatibilidad con la vacante",
+  generateDocuments: "Genera los documentos y postúlate",
+  compatibility: "Compatible",
+  coverLetter: "🧠 Carta de presentación",
+  summary: "📝 CV optimizado",
+  downloadDocuments: "Descargar",
+};
