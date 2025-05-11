@@ -8,10 +8,12 @@ import { reportLabels, vacancyLabels } from "@/utils/labels";
 import { useMemo } from "react";
 import styles from "./page.module.css";
 import Button from "@/components/Button";
-
+import { useEditContent } from "@/hooks/use-edit-content.hook";
 export default function Report() {
   const { router, resumeData, documents, isRecruiter, clearDocuments } =
     useReportDocuments();
+
+  const { clearEditedContent } = useEditContent();
 
   const level = useMemo(() => {
     if (!documents) return 0;
@@ -24,6 +26,7 @@ export default function Report() {
 
   const handleReset = () => {
     clearDocuments();
+    clearEditedContent();
     router.push("/resources");
   };
 
@@ -63,6 +66,7 @@ export default function Report() {
           content={`# ${resumeData.title}\n## Resumen profesional\n${resumeData.professionalSummary}\n## Información de contacto\n${resumeData.contactInformation}\n## Habilidades\n${resumeData.skills}\n## Experiencia laboral\n${resumeData.workExperience}\n## Proyectos\n${resumeData.projects}\n## Educación\n${resumeData.education}\n## Certificaciones\n${resumeData.certifications}`}
           icon="📝"
           id="curriculum"
+          goToRoute="/curriculum-analisys"
         />
       )}
       <div className={styles.actionContainer}>

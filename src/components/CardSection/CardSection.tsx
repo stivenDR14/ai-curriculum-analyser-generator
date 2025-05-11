@@ -8,6 +8,7 @@ import html2canvas from "html2canvas";
 import { reportLabels } from "@/utils/labels";
 import dynamic from "next/dynamic";
 import { useEditContent, EditableContent } from "@/hooks/use-edit-content.hook";
+import { useRouter } from "next/navigation";
 
 // Importar MDXEditor de forma dinámica para evitar problemas de SSR
 const MDXEditorComponent = dynamic(() => import("../MDXEditor/MDXEditor"), {
@@ -22,6 +23,7 @@ export default function CardSection({
   isSuggestion = false,
   id = "",
   showGeneratePDF = true,
+  goToRoute = "",
 }: {
   title: string;
   content: string;
@@ -29,7 +31,9 @@ export default function CardSection({
   isSuggestion?: boolean;
   id?: string;
   showGeneratePDF?: boolean;
+  goToRoute?: string;
 }) {
+  const router = useRouter();
   const [expanded, setExpanded] = useState(isSuggestion ? true : false);
   const [showPdfModal, setShowPdfModal] = useState(false);
   const pdfContentRef = useRef<HTMLDivElement>(null);
@@ -57,6 +61,11 @@ export default function CardSection({
   };
 
   const handleEditContent = () => {
+    if (goToRoute && goToRoute !== "") {
+      router.push(goToRoute);
+      return;
+    }
+
     // Iniciar edición de este contenido
     const editableContent: EditableContent = {
       id: id || title,

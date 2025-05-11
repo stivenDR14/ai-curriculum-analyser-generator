@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { DOCUMENTS_KEY } from "@/utils/constants-all";
-import { IDocuments } from "@/models/general";
+import { useResumeStore } from "./use-resumeStore";
 
 // Clave para almacenar el contenido editado en localStorage
 export const EDITED_CONTENT_KEY = "EDITED_CONTENT_KEY";
@@ -33,6 +33,8 @@ interface EditContentStoreState {
 
   // Método para cargar contenido editado desde localStorage
   loadEditedContentFromStorage: () => Record<string, string>;
+
+  clearEditedContent: () => void;
 }
 
 // Hook personalizado para gestionar la edición de contenido
@@ -48,7 +50,7 @@ export const useEditContentStore = create<EditContentStoreState>(
     setEditingContent: (content) => set({ editingContent: content }),
 
     saveContent: (id, newContent) => {
-      // Guardar cambios en localStorage
+      // Guardar cambios en localStorage con EDITED_CONTENT_KEY
       const editedContentMap = get().loadEditedContentFromStorage();
       editedContentMap[id] = newContent;
       localStorage.setItem(
@@ -56,24 +58,34 @@ export const useEditContentStore = create<EditContentStoreState>(
         JSON.stringify(editedContentMap)
       );
 
-      // Si el contenido forma parte de los documentos, actualizar en el store
-      try {
-        const documentsJson = localStorage.getItem(DOCUMENTS_KEY);
-        if (documentsJson) {
-          const documents: IDocuments = JSON.parse(documentsJson);
+      // Obtener el estado global de documentos
+      const documentsFromStore = useResumeStore.getState().documents;
 
-          // Actualizar el documento correspondiente según el ID
-          if (id === "report" && documents.report) {
-            documents.report = newContent;
-          } else if (id === "coverLetter" && documents.coverLetter) {
-            documents.coverLetter = newContent;
-          }
+      // Si hay documentos en el store global, actualizar según corresponda
+      if (documentsFromStore) {
+        const updatedDocuments = { ...documentsFromStore };
 
-          // Guardar los documentos actualizados
-          localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(documents));
+        // Actualizar el documento correspondiente según el ID
+        if (id === "report" && updatedDocuments.report !== undefined) {
+          updatedDocuments.report = newContent;
+        } else if (
+          id === "coverLetter" &&
+          updatedDocuments.coverLetter !== undefined
+        ) {
+          updatedDocuments.coverLetter = newContent;
+        } else if (
+          id === "curriculum" &&
+          updatedDocuments.report !== undefined
+        ) {
+          // No modificamos directamente el currículum porque está compuesto de varios campos
+          // Esto se manejaría en otro lugar si fuera necesario
         }
-      } catch (error) {
-        console.error("Error al actualizar documentos:", error);
+
+        // Actualizar el estado global con los documentos modificados
+        useResumeStore.getState().setDocuments(updatedDocuments);
+
+        // También actualizar localStorage para mantener consistencia
+        localStorage.setItem(DOCUMENTS_KEY, JSON.stringify(updatedDocuments));
       }
 
       // Limpiar estado de edición
@@ -105,6 +117,10 @@ export const useEditContentStore = create<EditContentStoreState>(
       }
       return {};
     },
+
+    clearEditedContent: () => {
+      localStorage.removeItem(EDITED_CONTENT_KEY);
+    },
   })
 );
 
@@ -120,7 +136,11 @@ export const useEditContent = () => {
     saveContent,
     cancelEdit,
     loadEditedContentFromStorage,
+    clearEditedContent,
   } = useEditContentStore();
+
+  // Obtener los documentos del estado global
+  const documents = useResumeStore((state) => state.documents);
 
   // Iniciar edición de una sección
   const startEditing = (content: EditableContent) => {
@@ -143,8 +163,20 @@ export const useEditContent = () => {
     cancelEdit();
   };
 
-  // Verificar si un contenido específico ha sido editado
+  // Obtener el contenido para mostrar, priorizando el estado global
   const getEditedContent = (id: string, defaultContent: string): string => {
+    // Primero intentar obtener del estado global de documentos
+    if (documents) {
+      if (id === "report" && documents.report !== undefined) {
+        return documents.report;
+      }
+      if (id === "coverLetter" && documents.coverLetter !== undefined) {
+        return documents.coverLetter;
+      }
+      // Para curriculum, ya se maneja con el objeto resumeData en CardSection
+    }
+
+    // Como fallback, intentar obtener de los contenidos editados guardados
     const editedContentMap = loadEditedContentFromStorage();
     return editedContentMap[id] || defaultContent;
   };
@@ -161,5 +193,6 @@ export const useEditContent = () => {
     saveChanges,
     cancelEditing,
     getEditedContent,
+    clearEditedContent,
   };
 };
