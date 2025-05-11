@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { showToast } from "@/components/Toast";
 import {
   DOCUMENTS_KEY,
-  RECRUITER_MODE_KEY,
   RESUME_DATA_KEY,
   SUGGESTIONS_KEY,
   VACANCY_DATA_KEY,
@@ -10,6 +9,7 @@ import {
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { IDocuments, IResume } from "@/models/general";
 import { useResumeStore } from "./use-resumeStore";
+import { useSettingsStore } from "./use-settingsStore";
 
 interface IResponse {
   success: boolean;
@@ -48,19 +48,22 @@ export const useDocuments = ({
   router: AppRouterInstance;
   isHome: boolean;
 }): UseDocumentsReturn => {
-  const [isRecruiter, setIsRecruiter] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      const savedMode = localStorage.getItem(RECRUITER_MODE_KEY);
-      return savedMode ? JSON.parse(savedMode) : false;
-    }
-    return false;
-  });
+  const isRecruiter = useSettingsStore((state) => state.isRecruiter);
+  const setIsRecruiter = useSettingsStore((state) => state.setIsRecruiter);
+  const loadIsRecruiterFromStorage = useSettingsStore(
+    (state) => state.loadIsRecruiterFromStorage
+  );
 
   const setResumeData = useResumeStore((state) => state.setResumeData);
+  const setVacancyData = useResumeStore((state) => state.setVacancyData);
+  const setDocumentsData = useResumeStore((state) => state.setDocuments);
+  useEffect(() => {
+    setIsRecruiter(isRecruiter);
+  }, [isRecruiter]);
 
   useEffect(() => {
-    localStorage.setItem(RECRUITER_MODE_KEY, JSON.stringify(isRecruiter));
-  }, [isRecruiter]);
+    loadIsRecruiterFromStorage();
+  }, []);
 
   useEffect(() => {
     if (isHome) {
@@ -83,9 +86,11 @@ export const useDocuments = ({
         DOCUMENTS_KEY,
         JSON.stringify((data.data as DocumentsData).documents)
       );
+      setDocumentsData((data.data as DocumentsData).documents);
     } else {
       if (isRecruiter) {
         showToast.success(data.message);
+        setVacancyData((data.data as VacancyData).vacancy);
         localStorage.setItem(
           VACANCY_DATA_KEY,
           JSON.stringify((data.data as VacancyData).vacancy)
