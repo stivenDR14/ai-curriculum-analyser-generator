@@ -118,5 +118,6 @@ export const reportLabels = {
   coverLetter: "Carta de presentación",
   curriculum: "Curriculum",
   downloadDocuments: "Descargar",
+  downloadPDF: "Descargar PDF",
   backToResources: "Volver",
 };
