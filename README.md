@@ -1,4 +1,4 @@
-# CareerFlow
+# Applyzen
 
 The AI Curriculum Analyzer & Generator is an innovative tool designed to transform how people prepare their resumes and how recruiters evaluate candidates. Using advanced artificial intelligence, this application analyzes resume documents and job descriptions to create meaningful connections between talent and job opportunities.
 

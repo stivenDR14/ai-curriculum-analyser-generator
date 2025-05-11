@@ -21,7 +21,6 @@ export const metadata: Metadata = {
     "Analiza y mejora tu CV o perfila candidatos ideales para tus vacantes utilizando inteligencia artificial",
   icons: {
     icon: "/main-icon.ico",
-    apple: "/main-icon.webp",
   },
 };
 
