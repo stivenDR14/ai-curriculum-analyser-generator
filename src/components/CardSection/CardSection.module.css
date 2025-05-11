@@ -9,13 +9,7 @@
 }
 
 .suggestionSection {
-  background: linear-gradient(
-    45deg,
-    #f0f0f0,
-    #4f8cff,
-    #e0e0e0c9,
-    rgb(165, 191, 202)
-  );
+  background: linear-gradient(45deg, #f0f0f0, #788ce6, #e0e0e0c9, #96a4e0ff);
   background-size: 200% 200%;
   animation: moveBackground 6s ease-in-out infinite alternate;
 }
@@ -234,5 +228,133 @@
 
   .actionButtons {
     justify-content: flex-start;
+  }
+}
+
+/* Estilos para el modal de PDF */
+.pdfModalOverlay {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 9999;
+}
+
+.pdfModalContent {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  max-width: 800px;
+  width: 95%;
+}
+
+.pdfModalHeader {
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+
+.pdfModalHeader h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.pdfModalActions {
+  display: flex;
+  gap: 12px;
+}
+
+.pdfDownloadButton {
+  background-color: #6755d0;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: background-color 0.2s;
+}
+
+.pdfDownloadButton:hover {
+  background-color: #5644c0;
+}
+
+.pdfCloseButton {
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #666;
+  cursor: pointer;
+  font-size: 20px;
+  height: 34px;
+  line-height: 1;
+  padding: 0;
+  width: 34px;
+}
+
+.pdfCloseButton:hover {
+  background-color: #f1f5f9;
+  color: #333;
+}
+
+.pdfDocumentContainer {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+.pdfDocumentContent {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  max-width: 210mm; /* Ancho A4 */
+  min-height: 297mm; /* Alto A4 */
+  overflow: hidden;
+  padding: 25mm 20mm 35mm; /* Añadido más margen inferior */
+}
+
+.pdfDocumentHeader {
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+}
+
+.pdfDocumentHeader h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.pdfDocumentBody {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+  .pdfModalContent {
+    height: 100vh;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .pdfDocumentContent {
+    padding: 16px 16px 35px; /* Añadido más margen inferior */
   }
 }

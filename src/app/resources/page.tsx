@@ -2,19 +2,32 @@
 
 import styles from "./page.module.css";
 import Button from "@/components/Button";
-import { useSettingsStore } from "@/hooks/use-settingsStore";
 import VacancyUploadExtractor from "@/components/Extractor/VacancyUploadExtractor";
 import { MAX_CHARACTERS } from "@/utils/constants-all";
 import {
   landingPageCurriculumLabels,
   landingPageHiringLabels,
+  loaderMessages,
+  resourcesLabels,
 } from "@/utils/labels";
-import { useRouter } from "next/navigation";
 import CurriculumUploadExtractor from "@/components/Extractor/CurriculumUploadExtractor";
-export default function Resources() {
-  const isRecruiter = useSettingsStore((state) => state.isRecruiter);
+import { UseHandleUploadFiles } from "@/hooks/use-handle-upload-files.hook";
+import Loader from "@/components/Loader";
 
-  const router = useRouter();
+export default function Resources() {
+  const {
+    router,
+    isRecruiter,
+    uploadedFiles,
+    disableSelectFile,
+    setUploadedFiles,
+    recruiterText,
+    cvText,
+    isLoading,
+    handleAnalyze,
+    handleTextChange,
+    handleSelectFile,
+  } = UseHandleUploadFiles(false);
 
   const handleReset = () => {
     if (isRecruiter) {
@@ -24,64 +37,69 @@ export default function Resources() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Loader
+        messages={[
+          loaderMessages.sendingResources,
+          loaderMessages.extractingInformation,
+          loaderMessages.abstractingInformation,
+          loaderMessages.somethingGreat,
+          loaderMessages.moreTime,
+        ]}
+        interval={isRecruiter ? 3000 : 5000}
+      />
+    );
+  }
   return (
     <main className={styles.container}>
       {!isRecruiter ? (
         <VacancyUploadExtractor
-          title={"¿A qué te quieres postular?"}
-          subtitle={
-            "En el campo a continuación, puedes incluir la descripción de la vacante, ya sea ingresando el texto, o archivos PDF que contengan información de la empresa, la descripcion del trabajo o incluso unviersidad y la vacante de grado"
-          }
-          uploadedFiles={[]}
-          setUploadedFiles={() => {}}
-          recruiterText={""}
-          onRecruiterTextChange={() => {}}
+          title={resourcesLabels.titleCandidate}
+          subtitle={resourcesLabels.subtitleCandidate}
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+          recruiterText={recruiterText}
+          onRecruiterTextChange={(e) => handleTextChange(e, true)}
           maxCharacters={MAX_CHARACTERS}
-          handleAnalyze={() => {}}
-          handleSelectFile={() => {}}
-          disableSelectFile={false}
+          handleAnalyze={() => handleAnalyze("vacancy")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
           dragText={landingPageCurriculumLabels.dragText}
           selectText={landingPageCurriculumLabels.selectText}
           selectFromText={landingPageCurriculumLabels.selectFromText}
           placeholderText={landingPageHiringLabels.placeholderText}
-          analyzeButtonText={landingPageHiringLabels.analyzeButtonText}
+          analyzeButtonText={resourcesLabels.continueButtonTextCandidate}
           switchText={""}
           onSwitch={() => {}}
         />
       ) : (
         <CurriculumUploadExtractor
-          title={"Incluye la hoja de vida del candidato"}
-          subtitle={
-            "En el campo a continuación, puedes incluir la hoja de vida del candidato, ya sea ingresando el texto, o archivos PDF que contengan información de la persona"
-          }
-          uploadedFiles={[]}
-          setUploadedFiles={() => {}}
-          cvText={""}
-          onCvTextChange={() => {}}
+          title={resourcesLabels.titleRecruiter}
+          subtitle={resourcesLabels.subtitleRecruiter}
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+          cvText={cvText}
+          onCvTextChange={(e) => handleTextChange(e, false)}
           maxCharacters={MAX_CHARACTERS}
-          handleAnalyze={() => {}}
-          handleSelectFile={() => {}}
-          disableSelectFile={false}
+          handleAnalyze={() => handleAnalyze("curriculum")}
+          handleSelectFile={handleSelectFile}
+          disableSelectFile={disableSelectFile}
           dragText={landingPageCurriculumLabels.dragText}
           selectText={landingPageCurriculumLabels.selectText}
           selectFromText={landingPageCurriculumLabels.selectFromText}
           uploadInfo={landingPageCurriculumLabels.uploadInfo}
-          analyzeButtonText={landingPageCurriculumLabels.analyzeButtonText}
+          analyzeButtonText={resourcesLabels.continueButtonTextRecruiter}
           switchText={""}
           onSwitch={() => {}}
         />
       )}
 
-      {isRecruiter && (
-        <div className={styles.actionContainer}>
-          <Button variant="primary">Continuar</Button>
-        </div>
-      )}
       <div className={styles.actionContainer}>
         <Button variant="switch" onClick={handleReset}>
           {isRecruiter
-            ? "Volver a revisar la vacante"
-            : "Volver a revisar el CV"}
+            ? resourcesLabels.rejectAndUploadOtherRecruiter
+            : resourcesLabels.rejectAndUploadOtherCandidate}
         </Button>
       </div>
     </main>

@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { IResume } from "@/models/resume";
+import { IDocuments, IResume } from "@/models/general";
 import {
+  DOCUMENTS_KEY,
   RESUME_DATA_KEY,
   SUGGESTIONS_KEY,
   VACANCY_DATA_KEY,
@@ -19,6 +20,10 @@ interface ResumeStoreState {
   setSuggestions: (data: string) => void;
   clearSuggestions: () => void;
   loadSuggestionsFromStorage: () => void;
+  documents: IDocuments | null;
+  setDocuments: (data: IDocuments) => void;
+  clearDocuments: () => void;
+  loadDocumentsFromStorage: () => void;
 }
 
 export const useResumeStore = create<ResumeStoreState>((set) => ({
@@ -75,6 +80,20 @@ export const useResumeStore = create<ResumeStoreState>((set) => ({
       const saved = localStorage.getItem(SUGGESTIONS_KEY);
       if (saved) {
         set({ suggestions: JSON.parse(saved) });
+      }
+    }
+  },
+  documents: null,
+  setDocuments: (data) => set({ documents: data }),
+  clearDocuments: () => {
+    set({ documents: null });
+    localStorage.removeItem(DOCUMENTS_KEY);
+  },
+  loadDocumentsFromStorage: () => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(DOCUMENTS_KEY);
+      if (saved) {
+        set({ documents: JSON.parse(saved) });
       }
     }
   },

@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import { showToast } from "@/components/Toast";
 import {
+  DOCUMENTS_KEY,
   RECRUITER_MODE_KEY,
   RESUME_DATA_KEY,
   SUGGESTIONS_KEY,
   VACANCY_DATA_KEY,
 } from "@/utils/constants-all";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { IResume } from "@/models/resume";
+import { IDocuments, IResume } from "@/models/general";
 import { useResumeStore } from "./use-resumeStore";
 
 interface IResponse {
   success: boolean;
   message: string;
-  data: ResumeData | VacancyData;
+  data: ResumeData | VacancyData | DocumentsData;
 }
 
 interface ResumeData {
@@ -28,6 +29,11 @@ interface VacancyData {
   error?: string;
 }
 
+interface DocumentsData {
+  documents: IDocuments;
+  error?: string;
+}
+
 interface UseDocumentsReturn {
   isRecruiter: boolean;
   setIsRecruiter: (value: boolean) => void;
@@ -35,7 +41,13 @@ interface UseDocumentsReturn {
   getResumeData: () => ResumeData | null;
 }
 
-export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
+export const useDocuments = ({
+  router,
+  isHome,
+}: {
+  router: AppRouterInstance;
+  isHome: boolean;
+}): UseDocumentsReturn => {
   const [isRecruiter, setIsRecruiter] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       const savedMode = localStorage.getItem(RECRUITER_MODE_KEY);
@@ -51,11 +63,13 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
   }, [isRecruiter]);
 
   useEffect(() => {
-    if (getResumeData() && !isRecruiter) {
-      router.push("/curriculum-analisys");
-    }
-    if (getResumeData() && isRecruiter) {
-      router.push("/vacancy");
+    if (isHome) {
+      if (getResumeData() && !isRecruiter) {
+        router.push("/curriculum-analisys");
+      }
+      if (getResumeData() && isRecruiter) {
+        router.push("/vacancy");
+      }
     }
   }, [isRecruiter]);
 
@@ -64,27 +78,34 @@ export const useDocuments = (router: AppRouterInstance): UseDocumentsReturn => {
       showToast.info(data.data.error);
     }
 
-    if (isRecruiter) {
-      showToast.success(data.message);
+    if (!isHome) {
       localStorage.setItem(
-        VACANCY_DATA_KEY,
-        JSON.stringify((data.data as VacancyData).vacancy)
-      );
-      localStorage.setItem(
-        SUGGESTIONS_KEY,
-        JSON.stringify((data.data as VacancyData).suggestions)
+        DOCUMENTS_KEY,
+        JSON.stringify((data.data as DocumentsData).documents)
       );
     } else {
-      showToast.success(data.message);
-      setResumeData((data.data as ResumeData).resume);
-      localStorage.setItem(
-        RESUME_DATA_KEY,
-        JSON.stringify((data.data as ResumeData).resume)
-      );
-      localStorage.setItem(
-        SUGGESTIONS_KEY,
-        JSON.stringify((data.data as ResumeData).suggestions)
-      );
+      if (isRecruiter) {
+        showToast.success(data.message);
+        localStorage.setItem(
+          VACANCY_DATA_KEY,
+          JSON.stringify((data.data as VacancyData).vacancy)
+        );
+        localStorage.setItem(
+          SUGGESTIONS_KEY,
+          JSON.stringify((data.data as VacancyData).suggestions)
+        );
+      } else {
+        showToast.success(data.message);
+        setResumeData((data.data as ResumeData).resume);
+        localStorage.setItem(
+          RESUME_DATA_KEY,
+          JSON.stringify((data.data as ResumeData).resume)
+        );
+        localStorage.setItem(
+          SUGGESTIONS_KEY,
+          JSON.stringify((data.data as ResumeData).suggestions)
+        );
+      }
     }
   };
 

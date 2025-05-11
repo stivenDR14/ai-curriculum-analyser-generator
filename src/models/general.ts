@@ -8,3 +8,10 @@ export interface IResume {
   skills: string;
   certifications: string;
 }
+
+export interface IDocuments {
+  report: string;
+  percentage: string;
+  coverLetter?: string;
+  summary: string;
+}
