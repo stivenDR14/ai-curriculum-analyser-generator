@@ -42,10 +42,10 @@ export default function Report() {
       <Description centered>{documents.summary}</Description>
       {documents.report && (
         <CardSection
-          title={""}
+          title={reportLabels.compatibilityReportTitle}
           content={documents.report}
-          icon=""
-          handleEdit={() => {}}
+          icon="📊"
+          id="report"
         />
       )}
       {!isRecruiter && documents.coverLetter && (
@@ -53,7 +53,7 @@ export default function Report() {
           title={reportLabels.coverLetter}
           content={documents.coverLetter}
           icon="🧠"
-          handleEdit={() => {}}
+          id="coverLetter"
         />
       )}
 
@@ -62,7 +62,7 @@ export default function Report() {
           title={reportLabels.curriculum}
           content={`# ${resumeData.title}\n## Resumen profesional\n${resumeData.professionalSummary}\n## Información de contacto\n${resumeData.contactInformation}\n## Habilidades\n${resumeData.skills}\n## Experiencia laboral\n${resumeData.workExperience}\n## Proyectos\n${resumeData.projects}\n## Educación\n${resumeData.education}\n## Certificaciones\n${resumeData.certifications}`}
           icon="📝"
-          handleEdit={() => {}}
+          id="curriculum"
         />
       )}
       <div className={styles.actionContainer}>

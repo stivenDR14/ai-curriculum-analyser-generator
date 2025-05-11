@@ -1,0 +1,83 @@
+.editorContainer {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.loading {
+  background: #f6f7f9;
+  border-radius: 8px;
+  color: #6755d0;
+  font-size: 16px;
+  padding: 30px;
+  text-align: center;
+  width: 100%;
+}
+
+.editorActions {
+  background: #f6f7f9;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+}
+
+.saveButton,
+.cancelButton {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.saveButton {
+  background-color: #6755d0;
+  color: white;
+  margin-left: 12px;
+}
+
+.saveButton:hover {
+  background-color: #5644c0;
+}
+
+.cancelButton {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.cancelButton:hover {
+  background-color: #e5e5e5;
+}
+
+/* Estilos adicionales para mejorar el aspecto del editor MDX */
+:global(.mdxeditor-toolbar) {
+  background: #f6f7f9;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+:global(.mdxeditor-content-editable) {
+  font-family: inherit;
+  line-height: 1.6;
+  min-height: 300px;
+  padding: 16px;
+}
+
+@media (max-width: 768px) {
+  .editorContainer {
+    margin: 10px 0;
+  }
+
+  .editorActions {
+    flex-wrap: wrap;
+  }
+
+  .saveButton,
+  .cancelButton {
+    margin: 5px;
+  }
+}

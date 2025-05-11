@@ -6,23 +6,41 @@ import { useState, useRef } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { reportLabels } from "@/utils/labels";
+import dynamic from "next/dynamic";
+import { useEditContent, EditableContent } from "@/hooks/use-edit-content.hook";
+
+// Importar MDXEditor de forma dinámica para evitar problemas de SSR
+const MDXEditorComponent = dynamic(() => import("../MDXEditor/MDXEditor"), {
+  ssr: false,
+  loading: () => <div className={styles.editorLoading}>Cargando editor...</div>,
+});
 
 export default function CardSection({
   title,
   content,
   icon,
-  handleEdit,
   isSuggestion = false,
+  id = "",
 }: {
   title: string;
   content: string;
   icon: string;
-  handleEdit: () => void;
   isSuggestion?: boolean;
+  id?: string;
 }) {
   const [expanded, setExpanded] = useState(isSuggestion ? true : false);
   const [showPdfModal, setShowPdfModal] = useState(false);
   const pdfContentRef = useRef<HTMLDivElement>(null);
+
+  // Usar el hook de edición de contenido
+  const { isEditing, currentEditId, startEditing, getEditedContent } =
+    useEditContent();
+
+  // Obtener el contenido que se mostrará (editado o original)
+  const displayContent = getEditedContent(id || title, content);
+
+  // Verificar si este componente está en modo edición
+  const isEditingThis = isEditing && currentEditId === (id || title);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -34,6 +52,17 @@ export default function CardSection({
 
   const handleClosePdfModal = () => {
     setShowPdfModal(false);
+  };
+
+  const handleEditContent = () => {
+    // Iniciar edición de este contenido
+    const editableContent: EditableContent = {
+      id: id || title,
+      title,
+      content: displayContent,
+      icon,
+    };
+    startEditing(editableContent);
   };
 
   const handleDownloadPDF = async () => {
@@ -91,6 +120,22 @@ export default function CardSection({
     }
   };
 
+  // Si está en modo edición, mostrar el editor
+  if (isEditingThis) {
+    return (
+      <div
+        className={`${styles.resultSection} ${
+          isSuggestion && styles.suggestionSection
+        }`}
+      >
+        <SectionTitle icon={icon}>{title}</SectionTitle>
+        <div className={styles.sectionContent}>
+          <MDXEditorComponent />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`${styles.resultSection} ${
@@ -105,10 +150,13 @@ export default function CardSection({
           }`}
         >
           <div className={styles.markdownContent}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {displayContent}
+            </ReactMarkdown>
           </div>
           {!isSuggestion &&
-            (content.split("\n").length > 3 || content.length > 100) && (
+            (displayContent.split("\n").length > 3 ||
+              displayContent.length > 100) && (
               <button className={styles.expandButton} onClick={toggleExpand}>
                 {expanded ? "Ver menos" : "Ver más"}
               </button>
@@ -116,7 +164,7 @@ export default function CardSection({
         </div>
         {!isSuggestion && (
           <div className={styles.actionButtons}>
-            <button className={styles.actionButton} onClick={handleEdit}>
+            <button className={styles.actionButton} onClick={handleEditContent}>
               Editar
             </button>
             <button
@@ -156,7 +204,7 @@ export default function CardSection({
                 </div>
                 <div className={styles.pdfDocumentBody}>
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {content}
+                    {displayContent}
                   </ReactMarkdown>
                 </div>
               </div>

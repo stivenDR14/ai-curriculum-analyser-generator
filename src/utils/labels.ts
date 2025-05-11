@@ -120,4 +120,5 @@ export const reportLabels = {
   downloadDocuments: "Descargar",
   downloadPDF: "Descargar PDF",
   backToResources: "Volver",
+  compatibilityReportTitle: "Reporte de compatibilidad",
 };

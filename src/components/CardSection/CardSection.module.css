@@ -358,3 +358,14 @@
     padding: 16px 16px 35px; /* Añadido más margen inferior */
   }
 }
+
+.editorLoading {
+  background: #f6f7f9;
+  border-radius: 8px;
+  color: #6755d0;
+  font-size: 16px;
+  padding: 30px;
+  text-align: center;
+  width: 100%;
+  margin: 20px 0;
+}
