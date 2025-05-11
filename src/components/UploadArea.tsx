@@ -1,25 +1,130 @@
-import React from "react";
+import React, {
+  useRef,
+  useState,
+  DragEvent,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import styles from "./UploadArea.module.css";
-
+import { ariaLabels, frontendErrorsLabels } from "@/utils/labels";
+import { showToast } from "@/components/Toast";
 interface UploadAreaProps {
   children: React.ReactNode;
   className?: string;
+  onFileSelect?: (file: File) => void;
+  accept?: string;
+  maxFiles?: number;
+  uploadedFiles: File[];
+  setUploadedFiles: Dispatch<SetStateAction<File[]>>;
 }
 
 export default function UploadArea({
   children,
   className = "",
+  onFileSelect,
+  accept = ".pdf",
+  maxFiles = 2,
+  uploadedFiles,
+  setUploadedFiles,
 }: UploadAreaProps) {
-  return <div className={`${styles.uploadArea} ${className}`}>{children}</div>;
-}
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-interface UploadTextProps {
-  children: React.ReactNode;
-  className?: string;
-}
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
 
-export function UploadText({ children, className = "" }: UploadTextProps) {
-  return <p className={`${styles.uploadText} ${className}`}>{children}</p>;
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFile(files[0]);
+    }
+  };
+
+  const handleFile = (file: File) => {
+    if (uploadedFiles.length >= maxFiles) {
+      showToast.error(frontendErrorsLabels.maximumFiles);
+      return;
+    }
+
+    if (onFileSelect) {
+      onFileSelect(file);
+    }
+    setUploadedFiles((prev) => [...prev, file]);
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleFile(files[0]);
+    }
+  };
+
+  const handleSelectTextClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className={styles.uploadAreaContainer}>
+      <div
+        className={`${styles.uploadArea} ${className} ${
+          isDragging ? styles.dragging : ""
+        }`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileInput}
+          accept={accept}
+          style={{ display: "none" }}
+        />
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child) && child.type === SelectText) {
+            return React.cloneElement(
+              child as React.ReactElement<SelectTextProps>,
+              {
+                onClick: handleSelectTextClick,
+              }
+            );
+          }
+          return child;
+        })}
+      </div>
+
+      {uploadedFiles.length > 0 && (
+        <div className={styles.uploadedFilesContainer}>
+          {uploadedFiles.map((file, index) => (
+            <div key={index} className={styles.fileItem}>
+              <span className={styles.fileName}>{file.name}</span>
+              <button
+                className={styles.removeButton}
+                onClick={() => handleRemoveFile(index)}
+                aria-label={ariaLabels.removeFile}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 interface UploadInfoProps {
@@ -43,7 +148,10 @@ export function SelectText({
   onClick,
 }: SelectTextProps) {
   return (
-    <span className={`${styles.selectText} ${className}`} onClick={onClick}>
+    <span
+      className={`${className === "" ? styles.selectText : className}`}
+      onClick={onClick}
+    >
       {children}
     </span>
   );

@@ -1,77 +1,144 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import styles from "./page.module.css";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
-import { Title, Description, SectionTitle } from "@/components/Typography";
+import { Title, Description } from "@/components/Typography";
+import { curriculumAnalisysLabels } from "@/utils/labels";
+import { useRouter } from "next/navigation";
+import CardSection from "@/components/CardSection/CardSection";
+import { useResumeStore } from "@/hooks/use-resumeStore";
+import { useEditContent } from "@/hooks/use-edit-content.hook";
 
 export default function CurriculumAnalisys() {
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const resumeData = useResumeStore((state) => state.resumeData);
+  const loadResumeFromStorage = useResumeStore(
+    (state) => state.loadResumeFromStorage
+  );
+  const clearResumeData = useResumeStore((state) => state.clearResumeData);
+  const suggestions = useResumeStore((state) => state.suggestions);
+  const clearSuggestions = useResumeStore((state) => state.clearSuggestions);
+  const loadSuggestionsFromStorage = useResumeStore(
+    (state) => state.loadSuggestionsFromStorage
+  );
+  const { clearEditedContent } = useEditContent();
+
+  useEffect(() => {
+    if (!resumeData) {
+      loadResumeFromStorage();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!suggestions) {
+      loadSuggestionsFromStorage();
+    }
+  }, []);
 
   const handleContinue = () => {
-    setIsLoading(true);
+    router.push("/resources");
   };
 
-  if (isLoading) {
-    return <Loader destination="/resources" />;
+  const handleReset = () => {
+    router.push("/");
+    clearResumeData();
+    clearSuggestions();
+    clearEditedContent();
+  };
+
+  if (!resumeData) {
+    return (
+      <main className={styles.container}>
+        <Loader messages={["Cargando"]} />
+      </main>
+    );
   }
 
   return (
     <main className={styles.container}>
-      <Title centered>
-        ¡Bien!, hemos terminado de analizar y extraer tu información
-      </Title>
+      <Title centered>{curriculumAnalisysLabels.analysisSuccess}</Title>
 
       <Description centered>
-        Hemos logrado un 90% de precisión en la extracción. Hemos generado las
-        siguientes secciones
+        {curriculumAnalisysLabels.analysisSuccessDescription}
       </Description>
 
-      <div className={styles.resultSection}>
-        <SectionTitle icon="📝">Título profesional sugerido</SectionTitle>
-        <div className={styles.sectionContent}>
-          <p>
-            Senior UX Designer | Consultor en Innovación Digital | Emprendedor
-            Creativo
-          </p>
-          <div className={styles.actionButtons}>
-            <button className={styles.actionButton}>Reescribir con IA</button>
-            <button className={styles.actionButton}>Editar</button>
-          </div>
-        </div>
-      </div>
+      <article>
+        <CardSection
+          title={curriculumAnalisysLabels.suggestions}
+          content={suggestions}
+          isSuggestion
+          icon="💡"
+        />
+        <CardSection
+          title={curriculumAnalisysLabels.professionalTitle}
+          content={resumeData.title}
+          icon="📝"
+          id="title"
+        />
 
-      <div className={styles.resultSection}>
-        <SectionTitle icon="📄">Extracto o resumen profesional</SectionTitle>
-        <div className={styles.sectionContent}>
-          <p>
-            Diseñador de experiencias con más de 15 años de trayectoria creando
-            soluciones digitales centradas en las personas y alineadas con
-            objetivos de negocio...
-          </p>
-          <div className={styles.actionButtons}>
-            <button className={styles.actionButton}>Reescribir con IA</button>
-            <button className={styles.actionButton}>Editar</button>
-          </div>
-        </div>
-      </div>
+        <CardSection
+          title={curriculumAnalisysLabels.contactInformation}
+          content={resumeData.contactInformation}
+          icon="📞"
+          id="contactInformation"
+        />
 
-      <div className={styles.resultSection}>
-        <SectionTitle icon="💼">Experiencia laboral</SectionTitle>
-        <div className={styles.sectionContent}>
-          <div className={styles.experienceItem}>
-            <h3>Fundador & UX Strategist</h3>
-            <p>Vittgo.com | 2023 - presente</p>
-          </div>
-        </div>
-      </div>
+        <CardSection
+          title={curriculumAnalisysLabels.professionalSummary}
+          content={resumeData.professionalSummary}
+          icon="📑"
+          id="professionalSummary"
+        />
 
-      <div className={styles.actionContainer}>
-        <Button onClick={handleContinue} variant="primary">
-          Guardar y Continuar
-        </Button>
-      </div>
+        <CardSection
+          title={curriculumAnalisysLabels.professionalExperience}
+          content={resumeData.workExperience}
+          icon="💼"
+          id="workExperience"
+        />
+
+        <CardSection
+          title={curriculumAnalisysLabels.professionalProjects}
+          content={resumeData.projects}
+          icon="🖇️"
+          id="projects"
+        />
+
+        <CardSection
+          title={curriculumAnalisysLabels.professionalEducation}
+          content={resumeData.education}
+          icon="🎓"
+          id="education"
+        />
+
+        <CardSection
+          title={curriculumAnalisysLabels.professionalSkills}
+          content={resumeData.skills}
+          icon="💪"
+          id="skills"
+        />
+
+        <CardSection
+          title={curriculumAnalisysLabels.professionalCertifications}
+          content={resumeData.certifications}
+          icon="🏆"
+          id="certifications"
+        />
+
+        <div className={styles.actionContainer}>
+          <Button onClick={handleContinue} variant="primary">
+            {curriculumAnalisysLabels.continueButtonText}
+          </Button>
+        </div>
+
+        <div className={styles.actionContainer}>
+          <Button onClick={handleReset} variant="switch">
+            {curriculumAnalisysLabels.rejectAndUploadOther}
+          </Button>
+        </div>
+      </article>
     </main>
   );
 }
