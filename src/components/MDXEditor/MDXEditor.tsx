@@ -27,10 +27,12 @@ const MDXEditorComponent: FC = () => {
   return (
     <div className={styles.editorContainer}>
       {editingContent && (
-        <MDXEditorClient
-          markdown={editingContent}
-          onChange={setEditingContent}
-        />
+        <div className={`${styles.mdxToolbar} ${styles.mdxContent}`}>
+          <MDXEditorClient
+            markdown={editingContent}
+            onChange={setEditingContent}
+          />
+        </div>
       )}
       <div className={styles.editorActions}>
         <button className={styles.saveButton} onClick={handleSave}>
