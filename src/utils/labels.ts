@@ -76,7 +76,7 @@ export const curriculumAnalisysLabels = {
 };
 
 export const vacancyLabels = {
-  continueButtonText: "Continuar a extraer la información de la vacante",
+  continueButtonText: "Continuar a extraer la información del candidato",
   rejectAndUploadOther: "Rechazar y subir otra vacante",
   title: "La vacante extraida es la siguiente",
   suggestionTitle: "Sugerencias",
