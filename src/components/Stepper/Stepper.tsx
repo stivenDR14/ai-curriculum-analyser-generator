@@ -26,7 +26,7 @@ const Stepper: React.FC = () => {
       ? {
           "/curriculum-analisys": 1,
           "/resources": 2,
-          "/reports": 3,
+          "/report": 3,
         }
       : {
           "/vacancy": 1,
@@ -83,8 +83,8 @@ const Stepper: React.FC = () => {
                   isActive
                     ? styles.active
                     : isCompleted
-                    ? styles.completed
-                    : styles.inactive
+                      ? styles.completed
+                      : styles.inactive
                 }`}
                 aria-current={isActive ? "step" : undefined}
               >
