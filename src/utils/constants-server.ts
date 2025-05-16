@@ -15,22 +15,6 @@ The input may include:
 
 ---
 
-## Output Format
-
-You must generate and return a JSON object with the following exact format:
-
-{
-  "documents": {
-    "report": "string",
-    "percentage": "string",
-    "summary": "string",
-    "coverLetter": "string (only if user requires to generate the cover letter)"
-  },
-  "error": "string"
-}
-
----
-
 ## Required Outputs
 
 ### 1. "documents.report" (Markdown formatted string)
@@ -152,8 +136,24 @@ Example:
 ---
 
 Remember to write it in the language of ${language}.
-
 `;
+
+/* 
+
+## Output Format
+
+- The output must be a JSON object with the following structure:
+
+
+  "documents": {
+    "report": "string",
+    "percentage": "string",
+    "summary": "string",
+    "coverLetter": "string (only if user requires to generate the cover letter)"
+  },
+  "error": "string"
+
+ */
 
 export const PROMPT_RESUME_REWRITE = async (language: string) => `
 
@@ -272,7 +272,7 @@ Requirements for resume:
 - The output must be a JSON object with the following structure:
 
 
-{
+
   "resume": {
     "title": "string",
     "contactInformation": "string",
@@ -285,7 +285,7 @@ Requirements for resume:
   },
   "suggestions": "string",
   "error": "string"
-}
+
 
  - description of each field:
    * title: the title that best describes the resume, write it in ${language}
@@ -372,11 +372,11 @@ Requirements for the vacancy:
 - It is mandatory to write it in ${language}.
 - The output must be a JSON object with the following structure:
 
-{
+
   "vacancy": "string",
   "error": "string",
   "suggestions": "string"
-}
+
 
 description of each field:
 * vacancy: the job description, write it in ${language}, it must be in markdown format without using JSON characters that may damage the markdown format
