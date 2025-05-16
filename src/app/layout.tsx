@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mejora tu CV con IA",
+  title: "Enhance your CV with AI",
   description:
-    "Analiza y mejora tu CV o perfila candidatos ideales para tus vacantes utilizando inteligencia artificial",
+    "Analyze and improve your CV or profile candidates for your vacancies using artificial intelligence",
   icons: {
     icon: "/main-icon.ico",
   },

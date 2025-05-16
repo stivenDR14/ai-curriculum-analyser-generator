@@ -52,7 +52,7 @@ export async function handleReport(
     }
 
     const object = await workflowReport(
-      "spanish",
+      "english",
       text,
       files,
       type,

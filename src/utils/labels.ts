@@ -2,47 +2,46 @@ import { MAX_FILES, MAX_MG_ALLOWED } from "./constants-all";
 
 export const landingPageCurriculumLabels = {
   title:
-    "Convierte tu hoja de vida en tu mejor herramienta con ayuda de la inteligencia artificial.",
+    "Transform your resume into your best tool with the help of artificial intelligence.",
   subtitle:
-    "Ahorra tiempo personalizando tu CV, tu carta de presentación y prepárate para cada oferta laboral.",
-  dragText: `También puedes arrastrar hasta ${MAX_FILES} archivos en formato PDF o`,
-  selectText: " selecciona ",
-  selectFromText: "desde tus archivos",
+    "Save time customizing your CV, your cover letter, and prepare for each job opportunity.",
+  dragText: `You can also drag up to ${MAX_FILES} PDF files or`,
+  selectText: " select ",
+  selectFromText: "from your files",
   uploadInfo:
-    "Sube el texto de tu hoja de vida o copia y pega el texto aquí. Asegúrate de que esté actualizada.",
-  analyzeButtonText: "Analizar CV",
-  switchText: "Soy reclutador",
+    "Upload your resume text or copy and paste the text here. Make sure it's up to date.",
+  analyzeButtonText: "Analyze CV",
+  switchText: "I'm a recruiter",
 };
 
 export const landingPageHiringLabels = {
-  title: "Información de la vacante",
+  title: "Job Vacancy Information",
   subtitle:
-    "Carga la información de la vacante para la que estás buscando talento. Asegúrate de que esté lo más completa posible",
+    "Load the information of the vacancy for which you are looking for talent. Make sure it's as complete as possible",
   placeholderText:
-    "Recuerda agregar empresa, rol, descripción, rango salarial, etc",
-  analyzeButtonText: "Analizar Vacante",
-  switchText: "Quiero optimizar mi CV",
+    "Remember to add company, role, description, salary range, etc.",
+  analyzeButtonText: "Analyze Vacancy",
+  switchText: "I want to optimize my CV",
 };
 
 export const ariaLabels = {
-  removeFile: "Eliminar archivo",
+  removeFile: "Remove file",
 };
 
 export const loaderMessages = {
-  sendingResources: "📤 Enviando los recursos 📤",
-  extractingInformation: "🔍 Extrayendo información de los recursos 🔍",
-  abstractingInformation: "🧠 Abstrayendo y generando la información 🧠",
-  generatingSections: "📝 Generando secciones optimas 📝",
-  somethingGreat: "✨ ¡Algo genial esta por generarse! ✨",
-  moreTime: "⏳ Un poco más para tener lista la abstracción... ⏳",
+  sendingResources: "📤 Sending resources 📤",
+  extractingInformation: "🔍 Extracting information from resources 🔍",
+  abstractingInformation: "🧠 Abstracting and generating information 🧠",
+  generatingSections: "📝 Generating optimal sections 📝",
+  somethingGreat: "✨ Something great is about to be generated! ✨",
+  moreTime: "⏳ A little more time to prepare the abstraction... ⏳",
 };
 
 export const frontendErrorsLabels = {
-  errorProcessing: "Error al procesar la solicitud",
-  maximumFiles: `Solo puedes subir hasta ${MAX_FILES} archivos`,
-  noFilesSelected:
-    "Por favor, selecciona al menos un archivo o ingresa el texto del recurso",
-  uploadError: "Error al subir los archivos",
+  errorProcessing: "Error processing request",
+  maximumFiles: `You can only upload up to ${MAX_FILES} files`,
+  noFilesSelected: "Please select at least one file or enter the resource text",
+  uploadError: "Error uploading files",
 };
 
 export const backendErrorsLabels = {
@@ -57,69 +56,69 @@ export const backendSuccessLabels = {
 };
 
 export const curriculumAnalisysLabels = {
-  continueButtonText: "Continuar a extraer la información de la vacante",
-  rejectAndUploadOther: "Rechazar y subir otro CV",
-  professionalTitle: "Título profesional sugerido",
-  contactInformation: "Información de contacto",
-  professionalSummary: "Extracto o resumen profesional",
-  professionalExperience: "Experiencia profesional",
-  professionalProjects: "Proyectos y logros",
-  professionalEducation: "Educación",
-  professionalSkills: "Habilidades",
-  professionalCertifications: "Certificaciones",
-  suggestions: "Sugerencias",
+  continueButtonText: "Continue to extract vacancy information",
+  rejectAndUploadOther: "Reject and upload another CV",
+  professionalTitle: "Suggested professional title",
+  contactInformation: "Contact information",
+  professionalSummary: "Professional summary",
+  professionalExperience: "Professional experience",
+  professionalProjects: "Projects and achievements",
+  professionalEducation: "Education",
+  professionalSkills: "Skills",
+  professionalCertifications: "Certifications",
+  suggestions: "Suggestions",
   analysisSuccess:
-    "¡Bien!, hemos terminado de analizar y extraer tu información",
+    "Great! We have finished analyzing and extracting your information",
   analysisSuccessDescription:
-    "Hemos logrado un 95% de precisión en la extracción. Hemos generado las siguientes secciones",
-  downloadPDF: "Descargar PDF",
+    "We have achieved 95% accuracy in extraction. We have generated the following sections",
+  downloadPDF: "Download PDF",
 };
 
 export const vacancyLabels = {
-  continueButtonText: "Continuar a extraer la información del candidato",
-  rejectAndUploadOther: "Rechazar y subir otra vacante",
-  title: "La vacante extraida es la siguiente",
-  suggestionTitle: "Sugerencias",
-  vacancyTitle: "Tu vacante",
-  loaderMessages: ["Cargando"],
+  continueButtonText: "Continue to extract candidate information",
+  rejectAndUploadOther: "Reject and upload another vacancy",
+  title: "The extracted vacancy is as follows",
+  suggestionTitle: "Suggestions",
+  vacancyTitle: "Your vacancy",
+  loaderMessages: ["Loading"],
 };
 
 export const resourcesLabels = {
-  titleRecruiter: "Incluye la hoja de vida del candidato",
+  titleRecruiter: "Include the candidate's resume",
   subtitleRecruiter:
-    "En el campo a continuación, puedes incluir la hoja de vida del candidato, ya sea ingresando el texto, o archivos PDF que contengan información de la persona",
+    "In the field below, you can include the candidate's resume, either by entering the text, or PDF files containing information about the person",
   uploadInfoRecruiter:
-    "Sube el texto de tu hoja de vida o copia y pega el texto aquí. Asegúrate de que esté actualizada.",
-  continueButtonTextRecruiter: "Continuar y generar reporte",
-  rejectAndUploadOtherRecruiter: "Volver a revisar la vacante",
-  titleCandidate: "¿A qué te quieres postular?",
+    "Upload your resume text or copy and paste the text here. Make sure it's up to date.",
+  continueButtonTextRecruiter: "Continue and generate report",
+  rejectAndUploadOtherRecruiter: "Go back to review the vacancy",
+  titleCandidate: "What do you want to apply for?",
   subtitleCandidate:
-    "En el campo a continuación, puedes incluir la descripción de la vacante, ya sea ingresando el texto, o archivos PDF que contengan información de la empresa, la descripcion del trabajo o incluso unviersidad y la vacante de grado",
-  continueButtonTextCandidate: "Continuar y generar reporte y documentos",
-  rejectAndUploadOtherCandidate: "Volver a revisar la hoja de vida",
+    "In the field below, you can include the description of the vacancy, either by entering the text, or PDF files containing information about the company, the job description or even university and degree vacancy",
+  continueButtonTextCandidate: "Continue and generate report and documents",
+  rejectAndUploadOtherCandidate: "Go back to review the resume",
 };
 
 export const stepperLabels = {
-  step11: "Hoja de vida",
-  step12: "Vacante",
-  step13: "Documentos",
-  step21: "Vacante",
-  step22: "Candidatos",
-  step23: "Reporte",
+  step11: "Resume",
+  step12: "Vacancy",
+  step13: "Documents",
+  step21: "Vacancy",
+  step22: "Candidates",
+  step23: "Report",
 };
 
 export const reportLabels = {
-  goodReport: "¡Bien 🔝!",
-  regularReport: "Hay aspectos que mejorar 🤔",
-  badReport: "Vaya 🚨",
-  youHaveReport: ", Existe un ",
-  compatibilityReport: "% de compatibilidad con la vacante",
-  generateDocuments: "Genera los documentos y postúlate",
+  goodReport: "Great 🔝!",
+  regularReport: "There are aspects to improve 🤔",
+  badReport: "Well 🚨",
+  youHaveReport: ", There is a ",
+  compatibilityReport: "% compatibility with the vacancy",
+  generateDocuments: "Generate documents and apply",
   compatibility: "Compatible",
-  coverLetter: "Carta de presentación",
+  coverLetter: "Cover letter",
   curriculum: "Curriculum",
-  downloadDocuments: "Descargar",
-  downloadPDF: "Descargar PDF",
-  backToResources: "Volver y borrar este reporte",
-  compatibilityReportTitle: "Reporte de compatibilidad",
+  downloadDocuments: "Download",
+  downloadPDF: "Download PDF",
+  backToResources: "Go back and delete this report",
+  compatibilityReportTitle: "Compatibility report",
 };

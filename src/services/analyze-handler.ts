@@ -81,7 +81,7 @@ export async function handleAnalysis(
       // Credentials are loaded from environment variables by default
     });
 
-    const language = "spanish";
+    const language = "english";
     const modelId = "amazon.nova-pro-v1:0";
 
     // Prepare the prompt and input for the model
