@@ -266,7 +266,7 @@ export const workflowReport = async (
   // Obtener el resultado del paso de integración
   const integrationResult = result.results.integrationStep;
 
-  console.log("result.results", result.results);
+  console.log("result.results", result);
 
   // Verificar si el paso de integración fue exitoso y contiene la propiedad finalReport
   if (
